@@ -1,0 +1,558 @@
+\nonstopmode{}
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `synoptReg'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\inputencoding{utf8}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Synoptic Climate Classification and spatial regionalization of
+environmental data}
+\item[Version]\AsIs{0.1.0}
+\item[Depends]\AsIs{R (>= 2.10)}
+\item[Author]\AsIs{Marc Lemus-Canovas}
+\item[Maintainer]\AsIs{Marc Lemus-Canovas }\email{mlemus@ub.edu}\AsIs{}
+\item[Description]\AsIs{Computes a synoptic climate classification through daily reanalysis data,
+creates a climate or environmental regionalisation.}
+\item[License]\AsIs{GPL (>= 3)}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[Imports]\AsIs{ncdf4, zoo, fields, raster, maps}
+\item[NeedsCompilation]\AsIs{no}
+\item[RoxygenNote]\AsIs{6.1.0}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{cwt\_env\_raststack}{Raster conversion of environmental data based on CWT}{cwt.Rul.env.Rul.raststack}
+%
+\begin{Description}\relax
+This function convert the dataframe of the environmental data based on the synoptic classification into a raster stack format.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+cwt_env_raststack(longitude, latitude, grid_data, cluster_data,
+  option = 1, na.rm = T)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{longitude}] Numeric vector containing longitudes
+
+\item[\code{latitude}] Numeric vector containing latitudes
+
+\item[\code{grid\_data}] Data frame containing the environmental data (i.e. precipitation, temperature, PM10, etc.)
+
+\item[\code{cluster\_data}] Integer containing the results of the synoptic classification.
+
+\item[\code{option}] Integer (1 or 2), to manage latitude and longitude data when convert to raster. Try 2 if 1 is wrong and viceversa. Default is 1.
+
+\item[\code{na.rm}] Logical. If TRUE, all the grid points are used to calculate the daily mean although NA exists. If FALSE, only grid points with the complete serie are used to compute the daily mean. Default is TRUE.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a Raster Stack containing the environmental grids based on the weather types.
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (precp_grid)
+data(precp_grid)
+# Converting our data, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+precp_data <- tidy_cuttime_nc(precp_grid, only_convert = TRUE)
+# classification performance
+smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
+# convert all the precipitation maps based on CWT to a raster stack
+raster_precp <- cwt_env_raststack(longitude = precp_grid$lon,
+                latitude = precp_grid$lat, grid_data = precp_data$smode_data,
+                cluster_data = smode_clas$clas, option = 2)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{mslp}{Mean Sea Level pressure files}{mslp}
+\keyword{datasets}{mslp}
+%
+\begin{Description}\relax
+Data from a ERA-20C reanalysis data set downloaded from ECMWF
+(\url{http://apps.ecmwf.int/datasets/data/era20c-daily/levtype=sfc/type=an/}).
+This data corresponds to global daily values of mean sea level pressure with 125 x 125 km resolution from January 2000 to december 2009. Geographic window: 60N-30N,30W-15E.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(mslp)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with values of pressure and coordinates (longitude, latitude, time)
+\begin{description}
+
+\item[datavar] mean sea level pressure values, "Pa"
+\item[lon] 46
+\item[latitude] 31
+\item[dates] 3653, ten years (2000-01-01 / 2009-12-31)
+
+\end{description}
+\end{Format}
+%
+\begin{References}\relax
+Poli et al. (2016)
+\emph{ERA-20C: An Atmospheric Reanalysis of the Twentieth Century.
+J. Climate, 29, 4083–4097, https://doi.org/10.1175/JCLI-D-15-0556.1}
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(mslp)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{pca\_decision}{PCA decision}{pca.Rul.decision}
+%
+\begin{Description}\relax
+\code{pca\_decision} plots the explained variances against the number of the principal component. In addition, it returns all the information about the PCA performance.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+pca_decision(smode_data)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{smode\_data}] S-mode dataframe of the reanalysis variable. I.e. output obtained from \code{tidy\_cuttime\_nc} function.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a list with: \begin{itemize}
+
+\item A list with class \code{"princomp"} containing all the results of the PCA 
+\item A data frame containing the main results of the 30 first PCA (standard deviation, proportion of variance and cumulative variance).
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Note}\relax
+S-mode PCA require more rows than columns to work. In addition, input data cannot contain NAs.
+\end{Note}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{tidy\_cuttime\_nc}{tidy.Rul.cuttime.Rul.nc}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (mslp)
+data(mslp)
+# Converting our data into a S-mode, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+# PCA decision performance
+info_pca <- pca_decision(smode_mslp$smode_data)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{plot\_clas}{Synoptic classification plot}{plot.Rul.clas}
+%
+\begin{Description}\relax
+Plot the synoptic classification
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plot_clas(longitude, latitude, grouped_data, cwt_number,
+  divide_units = 100, zmin, zmax, legend.lab = "", ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{longitude}] Numeric. vector containing longitudes.
+
+\item[\code{latitude}] Numeric. vector containing latitudes.
+
+\item[\code{grouped\_data}] Data frame. S-mode data frame containing an integer column with the weather types. i.e. output obtained from \code{synoptclas} function.
+
+\item[\code{cwt\_number}] Integer. Number of CWT to plot.
+
+\item[\code{divide\_units}] Integer to divide previous units. Default is 100.
+
+\item[\code{zmin}] Integer. Minimum value to represent. Useful if you display many plots. Optional.
+
+\item[\code{zmax}] Integer. Maximum value to represent. Useful if you display many plots. Optional.
+
+\item[\code{legend.lab}] Character. Name of the variable used.
+
+\item[\code{...}] Other graphical parameters.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{synoptclas}{synoptclas}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (mslp)
+data(mslp)
+# Converting our data into a S-mode, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+# classification performance
+smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
+# Plot circulation weather type number 3
+plot_clas(longitude = mslp$lon, latitude = mslp$lat,
+          grouped_data = smode_clas$grouped_data,
+          cwt_number = 3)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{plot\_env}{Environmental data plot based on CWT}{plot.Rul.env}
+%
+\begin{Description}\relax
+Plot the daily mean spatial distribution of an environmental data based on the synoptic classification
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plot_env(longitude, latitude, cluster_data, grid_data, cwt_number = 1,
+  option = 1, na.rm = T, zmin, zmax, divide_units = 1,
+  legend.lab = "", ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{longitude}] Numeric. vector containing longitudes.
+
+\item[\code{latitude}] Numeric. vector containing latitudes.
+
+\item[\code{cluster\_data}] Integer containing the results of the synoptic classification.
+
+\item[\code{grid\_data}] Data frame containing the environmental data (i.e. precipitation, temperature, PM10, etc.)
+
+\item[\code{cwt\_number}] Integer. Number of CWT to plot.
+
+\item[\code{option}] Integer (1 or 2), to manage latitude and longitude data when plot. Try 2 if 1 is wrong and viceversa. Default is 1.
+
+\item[\code{na.rm}] Logical. If TRUE, all the grid points are used to calculate the daily mean although NA exists. If FALSE, only grid points with the complete serie are used to compute the daily mean. Default is TRUE.
+
+\item[\code{zmin}] Integer. Minimum value to represent. Useful if you display many plots. Optional.
+
+\item[\code{zmax}] Integer. Maximum value to represent. Useful if you display many plots. Optional.
+
+\item[\code{divide\_units}] Integer to divide previous units. Default is 1.
+
+\item[\code{legend.lab}] Character. name of the variable used.
+
+\item[\code{...}] Other graphical parameters.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{synoptclas}{synoptclas}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (precp_grid and mslp)
+data(precp_grid)
+data(mslp)
+# Converting our data, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+precp_data <- tidy_cuttime_nc(precp_grid, only_convert = TRUE)
+# classification performance
+smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
+# Plot precipitation data based on cwt 3
+plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat,
+         cluster_data = smode_clas$clas, grid_data = precp_data$smode_data,
+         cwt_number = 3, option = 2, divide_units = 10, legend.lab = "mm")
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{precp\_grid}{Daily precipitation grid of Balearic Islands (Spain)}{precp.Rul.grid}
+\keyword{datasets}{precp\_grid}
+%
+\begin{Description}\relax
+Data from a SPREAD data set downloaded from CSIC.
+(\url{http://digital.csic.es/handle/10261/141218}).
+This data corresponds to daily values of precipitation with 5 x 5 km resolution from January 2000 to december 2009.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(precp_grid)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list with values of pressure and coordinates (longitude, latitude, time)
+\begin{description}
+
+\item[datavar] daily precipitation values, "mm*10"
+\item[lon] 53
+\item[latitude] 35
+\item[dates] 3653, ten years (2000-01-01 / 2009-12-31)
+
+\end{description}
+\end{Format}
+%
+\begin{References}\relax
+Serrano-Notivoli et al. (2017)
+\emph{SPREAD: a high-resolution daily gridded precipitation dataset for Spain – an extreme events frequency and intensity overview.
+Earth Syst. Sci. Data, 9, 721-738, 2017, https://doi.org/10.5194/essd-9-721-2017}
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(precp_grid)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{raster\_pca}{Raster PCA}{raster.Rul.pca}
+%
+\begin{Description}\relax
+Perform a Principal Component Analysis on a RasterStack
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+raster_pca(raststack, aggregate = 0, focal = 0)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{raststack}] Raster Stack.
+
+\item[\code{aggregate}] Integer. Aggregation factor based on function \code{aggregate} of \pkg{raster} package.
+
+\item[\code{focal}] Integer. smooth filter based on function \code{focal} of \pkg{raster} package.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a list with: \begin{itemize}
+
+\item A raster stack containing the results of the PCA 
+\item A data frame containing the main results of the PCA (standard deviation, proportion of variance and cumulative variance
+
+\end{itemize}
+
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{read\_nc}{Read a NetCDF file}{read.Rul.nc}
+%
+\begin{Description}\relax
+This function read a NetCDF file through \pkg{ncdf4} package, to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF withouth date gaps is required.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+read_nc(nc_input, name_coord, initial_date)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{nc\_input}] NetCDF path with atmospheric or environmental field (mean sea level pressure, geopotential height, precipitation, ...).
+
+\item[\code{name\_coord}] Character. Names of longitude, latitude and time coordinates.
+
+\item[\code{initial\_date}] Character. Start date of the NetCDF. As character format.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a list with: \begin{itemize}
+
+\item A 3D-array (lon, lat, times) of atmospheric variable.
+\item A numeric with longitude values.
+\item A numeric with latitude values.
+\item A Date format vector containing dates.
+
+\end{itemize}
+
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{regionalisation}{Environmental regionalisation}{regionalisation}
+%
+\begin{Description}\relax
+Perform an unspervised clustering of the Raster Stack
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+regionalisation(raststack, centers, iter.max = 100, nstart = 100)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{raststack}] Raster Stack.
+
+\item[\code{centers}] Integer. Number of clusters.
+
+\item[\code{iter.max}] Integer. The maximum number of iterations allowed. Default 100.
+
+\item[\code{nstart}] Integer. How many random sets should be chosen? Default 100.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a list with: \begin{itemize}
+
+\item A raster with the final regionalisation 
+\item A list with the results of the K-means performance
+\item A raster displaying a pseudo-MAE error based on the difference between each pixel value and its respective centroide
+\item A numeric pseudo-MAE mean value for the entire map
+
+\end{itemize}
+
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{synoptclas}{Synoptic classification}{synoptclas}
+%
+\begin{Description}\relax
+\code{synoptclas} establish a synoptic classification based on any atmospheric variable (i.e. mean sea level pressure, geoptential height at 500 hPa, etc.)
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+synoptclas(smode_data, ncomp, extreme_scores = 2)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{smode\_data}] Data frame. S-mode data frame of the reanalysis variable. I.e. output obtained from \code{tidy\_cuttime\_nc} function.
+
+\item[\code{ncomp}] Integer. Number of components to be retained.
+
+\item[\code{extreme\_scores}] Integer. Definition of extreme score threshold (Esteban et al., 2005). Default is 2.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+A PCA is applied to a S-mode matrix to reduce the dimension of the variables, in which the grid points are the variables and the days are the observations.
+These principal components are subsequently rotated by means of a varimax rotation. With the rotated components, the scores are used to apply the extreme
+scores method (Esteban et al., 2005). The scores show the degree of representativeness associated with the variation modes of each principal component, i.e.,
+the classification of each day to its more representative centroid. Thus, the extreme scores method uses the scores > 2 and < -2, establishing a positive and
+negative phase for each principal component. The extreme scores procedure establishes the number of groups and their centroids in order to apply the K-means
+method without iterations.
+\end{Details}
+%
+\begin{Value}
+A list with: \begin{itemize}
+
+\item A data frame containing data grouped by circulation weather types ("grouped\_data").
+\item An integer with the circulation weather types ("clas").
+\item A data frame containing the number and percentage of days assigned to each weather type ("cwt\_freq").
+\item A data frame containing the number of days assigned to each weather type by month ("monthly\_freq").
+\item A data frame containing the number of days assigned to each weather type by year ("annual\_freq").
+\item The 'rotated' loadings matrix of class \code{"loadings"} ("rotated\_loadings").
+\item The scores of the supplied data on the principal components ("scores").
+\item The coordinates of the scores used to perform the k-means clustering. For more information, read Esteban et al. (2005)("scores\_coordinates").
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{References}\relax
+
+Esteban, P. , Jones, P. D., Martín‐Vide, J. and Mases, M. (2005)
+\emph{Atmospheric circulation patterns related to heavy snowfall days in Andorra, Pyrenees}
+Int. J. Climatol. 25: 319-329. doi:10.1002/joc.1103
+
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{pca\_decision}{pca.Rul.decision}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (mslp)
+data(mslp)
+# Converting our data into a S-mode, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+# classification performance
+smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
+
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{tidy\_cuttime\_nc}{Format a 3D-array to a S-mode data frame and set the time period}{tidy.Rul.cuttime.Rul.nc}
+%
+\begin{Description}\relax
+This function format the 3D-array output from \code{read\_nc} function to a S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3-month season.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+tidy_cuttime_nc(datalist, only_convert = TRUE, season, initial_year,
+  end_year)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{datalist}] List. 3D-array of atmospheric or environmental variable, longitudes, latitudes and time. I.e. the list returned by \code{read\_nc}.
+
+\item[\code{only\_convert}] Logical. If TRUE the function only format data, if FALSE data is formatted and subsetted by specific time and/or season period.
+
+\item[\code{season}] Character. Name of the season wanted (i.g. "winter", "spring", "summer", "fall", "year").
+
+\item[\code{initial\_year}] Integer. Start year wanted to subset the data.
+
+\item[\code{end\_year}] Integer. End year wanted to subset the data.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A list with: \begin{itemize}
+
+\item A vector of dates.
+\item A dataframe of the variable in S-mode.
+\item A character with the name of the season (if only\_convert = FALSE).
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{read\_nc}{read.Rul.nc}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+# Load data (mslp or precp_grid)
+data(mslp)
+# Converting our data into a S-mode, but without modifying time period
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
+# matrix conversion and setting time period for winters between 2001 and 2010
+smode_mslp <- tidy_cuttime_nc(mslp, only_convert = FALSE, season = "winter",
+                             initial_year = 2001, end_year = 2010)
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

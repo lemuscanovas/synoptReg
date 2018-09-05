@@ -1,0 +1,14 @@
+cwt_env_raststack       Raster conversion of environmental data based
+                        on CWT
+mslp                    Mean Sea Level pressure files
+pca_decision            PCA decision
+plot_clas               Synoptic classification plot
+plot_env                Environmental data plot based on CWT
+precp_grid              Daily precipitation grid of Balearic Islands
+                        (Spain)
+raster_pca              Raster PCA
+read_nc                 Read a NetCDF file
+regionalisation         Environmental regionalisation
+synoptclas              Synoptic classification
+tidy_cuttime_nc         Format a 3D-array to a S-mode data frame and
+                        set the time period
