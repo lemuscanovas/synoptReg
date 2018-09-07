@@ -4,7 +4,7 @@ synoptReg<img src="img/logo.png" align="right"  height="160" />
 Overview
 --------
 
-**synoptReg** is an open source package fot computing synoptic climate classifications and spatial regionalizations of environmental data.
+**synoptReg** is an open source package for computing synoptic climate classifications and spatial regionalizations of environmental data.
 
 Installation
 ------------
@@ -119,11 +119,9 @@ Now we are observing the spatial patterns of the precipitaiton over the Balearic
 ``` r
 # Nevertheless, we want a final map with the precipitation regions/regimes of our
 # study area. You can use a for loop to find the ideal number of regions. In this
-# case we have apply the regionalisation with 4 centers (regions).
+# case we have applied the regionalisation with 4 centers (regions).
 precp_region <- regionalisation(pca_precp$rasterPCA, centers = 4)
 raster::plot(precp_region$regionalisation, legend = F, 
              col = c("orange", "green4", "darkred","lightblue"))
 ```
-
-
-.... Manca escriure sobre la funció **regionalisation**
+<img src="img/precp_pca.png" height="325" />
