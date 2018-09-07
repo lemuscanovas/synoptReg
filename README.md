@@ -63,7 +63,7 @@ mslp_s_clas <- synoptclas(smode_data = mslp_s$smode_data, ncomp =  6)
 # So we will use plot_clas to do it!
 plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, 
           cwt_number = 3, legend.lab = "hPa")
-title(paste("CWT 3"))
+title("CWT 3")
 ```
 <img src="img/synopt_clas3.png" height="425" />
 
