@@ -36,22 +36,21 @@ Usage
 ```r
 library(synoptReg)
 
-#Here, I load a map for the River Derwent in Tasmania with the raster package:
 # First of all, you need a NetCDF containing an atmospheric variable.
 # Use read_nc to read the data easily. The output is a list object as 
-# we shall see below.  
-localtif = raster::raster("tasmania.tif")
+# we shall see below. 
+data(mslp)
 
-#And convert it to a matrix:
-elmat = matrix(raster::extract(localtif,raster::extent(localtif),buffer=1000),
-               nrow=ncol(localtif),ncol=nrow(localtif))
+# Now we need to convert our mslp data into S-mode data frame:
+mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = T)
 
-#We use another one of rayshader's built-in textures:
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  plot_map()
+# Before to apply the synoptic classification we need some information
+# about the number of PCA to select in the procedure. For this reason,
+# we use pca_decision
+info_pca_mslp <- pca_decision(smode_data = mslp_s$smode_data)
 ```
-![](tools/readme/first.jpg)
+A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at info_clas$summary
+![](img/.jpg)
 
 ```r
 #sphere_shade can shift the sun direction:
