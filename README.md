@@ -104,15 +104,15 @@ precp_stack <- cwt_env_raststack(longitude = precp_grid$lon,
 # Now, let's to inspect the raster stack! 
 raster::plot(precp_stack/10) # data expressed in mm
 ```
-<img src="img/precp_raststack.png" height="500" />
+<img src="img/precp_raststack.png" height="600" />
 
 ``` r
-elmat %>%
-  sphere_shade( texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  add_shadow(ray_shade(elmat)) %>%
-  add_shadow(ambient_shade(elmat)) %>%
-  plot_map()
+# Good! But we are looking for a simplified version, in order to obtain a
+# schematic regionalisation. So we apply a "raster_pca" over our raster stack
+# In addition, if we work with larger areas, we can use aggregate and focal
+# to make the posterior regions with "regionalisation" function more continuous.
+pca_precp <- raster_pca(precp_stack)
+
 ```
 
 ![](tools/readme/fifth.jpg)
