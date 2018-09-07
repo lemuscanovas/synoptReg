@@ -34,10 +34,12 @@ Usage
 -----
 
 ```r
-library(rayshader)
-library(magrittr)
+library(synoptReg)
 
 #Here, I load a map for the River Derwent in Tasmania with the raster package:
+# First of all, you need a NetCDF containing an atmospheric variable.
+# Use read_nc to read the data easily. The output is a list object as 
+# we shall see below.  
 localtif = raster::raster("tasmania.tif")
 
 #And convert it to a matrix:
