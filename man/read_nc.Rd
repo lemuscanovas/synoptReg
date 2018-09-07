@@ -22,5 +22,5 @@ a list with: \itemize{
 }
 }
 \description{
-This function read a NetCDF file through \pkg{ncdf4} package, to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF withouth date gaps is required.
+This function reads a NetCDF file through \pkg{ncdf4} package, to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF without date gaps is required.
 }
