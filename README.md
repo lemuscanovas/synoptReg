@@ -18,51 +18,39 @@ devtools::install_github("lemuscanovas/synoptReg")
 Functions
 ---------
 
-<img   src="man/figures/ray_small.png"><img   src="man/figures/sphere_small.png"><img   src="man/figures/imhof_small.png"><img   src="man/figures/amb_small.png"><img   src="man/figures/lamb_small.png"><img   src="man/figures/alltogether_small.png">
+synoptReg has two functions related to read and format data:
 
-Rayshader has five functions related to hillshading:
+-   `read_nc` reads a NetCDF file to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF without date gaps is required.
+-   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3 - month season.
 
--   `ray_shade` uses user specified light directions to calculate a global shadow map for an elevation matrix. By default, this also scales the light intensity at each point by the dot product of the mean ray direction and the surface normal (also implemented in function `lamb_shade`, this can be turned off by setting `lambert=FALSE`.
--   `sphere_shade` maps an RGB texture to a hillshade by spherical mapping. A texture can be generated with the `create_texture` function, or loaded from an image. `sphere_shade` also includes 7 built-in palettes: "imhof1","imhof2","imhof3",imhof4","desert","bw","unicorn".
--   `create_texture` programmatically creates texture maps given five colors: a highlight, a shadow, a left fill light, a right fill light, and a center color for flat areas. The user can also optionally specify the colors at the corners, but `create_texture` will interpolate those if they aren't given.
--   `ambient_shade` creates an ambient occlusion shadow layer, darkening areas that have less scattered light from the atmosphere. This results in valleys being darker than flat areas and ridges.
--   `lamb_shade` uses a single user specified light direction to calculate a local shadow map based on the dot product between the surface normal and the light direction for an elevation matrix.
--   `add_shadow` takes two of the shadow maps above and combines them, scaling the second one (or, if the second is an RGB array, the matrix) as specified by the user.
 
-Rayshader also has two functions to detect and add water to maps:
+synoptReg also has two functions to performe the PCA:
 
--   `detect_water` uses a flood-fill algorithm to detect bodies of water of a user-specified minimum area.
--   `add_water` uses the output of `detect_water` to add a water color to the map. The user can input their own color, or pass the name of one of the pre-defined palettes from `sphere_shade` to get a matching hue.
+-   `pca_decision` abc.
+-   `synoptclas` abc.
 
-And two functions to display and save your maps:
-
--   `plot_map` Plots the current map. Accepts either a matrix or an array.
--   `save_png` Saves the current map to disk with a user-specified filename.
--   `plot_3d` Creates a 3D map, given a texture and an elevation matrix. You can customize the appearance of the map, as well as add a user-defined water level.
--   `save_3dprint` Writes a stereolithography (STL) file of the current 3D map to create a 3D printable map. The user can specify the physical maximum width of the 3D print when calling the function.
-
-All of these functions are designed to be used with the magrittr pipe `%>%`.
 
 Usage
 -----
 
 ```r
-library(rayshader)
-library(magrittr)
+library(synoptReg)
 
-#Here, I load a map for the River Derwent in Tasmania with the raster package:
-localtif = raster::raster("tasmania.tif")
+# First of all, you need a NetCDF containing an atmospheric variable.
+# Use read_nc to read the data easily. The output is a list object as 
+# we shall see below. 
+data(mslp)
 
-#And convert it to a matrix:
-elmat = matrix(raster::extract(localtif,raster::extent(localtif),buffer=1000),
-               nrow=ncol(localtif),ncol=nrow(localtif))
+# Now we need to convert our mslp data into S-mode data frame:
+mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = T)
 
-#We use another one of rayshader's built-in textures:
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  plot_map()
+# Before to apply the synoptic classification we need some information
+# about the number of PCA to select in the procedure. For this reason,
+# we use pca_decision
+info_pca_mslp <- pca_decision(smode_data = mslp_s$smode_data)
 ```
-![](tools/readme/first.jpg)
+A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at info_clas$summary
+![](img/.jpg)
 
 ```r
 #sphere_shade can shift the sun direction:
