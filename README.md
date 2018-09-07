@@ -21,7 +21,7 @@ Functions
 synoptReg has two functions related to read and format data:
 
 -   `read_nc` reads a NetCDF file to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF without date gaps is required.
--   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3 - month season.
+-   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or decide if you want work with the full year or only with 3 - month season.
 
 
 synoptReg also has two functions to performe the PCA:
@@ -124,4 +124,4 @@ precp_region <- regionalisation(pca_precp$rasterPCA, centers = 4)
 raster::plot(precp_region$regionalisation, legend = F, 
              col = c("orange", "green4", "darkred","lightblue"))
 ```
-<img src="img/precp_pca.png" height="325" />
+<img src="img/regionalisation.png" height="300" />
