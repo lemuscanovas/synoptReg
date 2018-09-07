@@ -42,7 +42,7 @@ library(synoptReg)
 data(mslp)
 
 # Now we need to convert our mslp data into S-mode data frame:
-mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = T)
+mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = TRUE)
 
 # Before to apply the synoptic classification we need some information
 # about the number of PCA to select in the procedure. For this reason,
@@ -53,15 +53,25 @@ A scree plot is represented to select the number of PCA to retain. We could deci
 ![](img/scree_test.png)
 
 ```r
-#sphere_shade can shift the sun direction:
-elmat %>%
-  sphere_shade(sunangle = 45, texture = "desert") %>%
-  plot_map()
+# Once we have decided on the number of components, we will proceed 
+# with the synoptic classification:
+mslp_s_clas <- synoptclas(smode_data = mslp_s$smode_data, ncomp =  6) 
+
+# if you do a little research on the resulting object, you obtain
+# some interesting stats about the classification procedure.
+# But now, it's time to represent our synoptic classification
+# So we will use plot_clas to do it!
+plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, cwt_number = 3, legend.lab = "hPa")
+title(paste("CWT 3"))
 ```
-![](tools/readme/second.jpg)
+![](img/synopt_clas3.png)
+As you see, the circulation weather type (CWT) 3 is displayed!
 
 ```r
-#detect_water and add_water adds a water layer to the map:
+# Now we would like to know how the precipitation is spatialy 
+# distributed over the Balearic Islands (Spain) when the CWT 3
+# occurs. To do it, we need to read our precp_grid data and 
+# reformat with tidy_cuttime_nc.
 elmat %>%
   sphere_shade(texture = "desert") %>%
   add_water(detect_water(elmat), color="desert") %>%
