@@ -48,7 +48,7 @@ mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = TRUE)
 # Before to apply the synoptic classification we need some information
 # about the number of PCA to select in the procedure. For this reason,
 # we use pca_decision
-info_pca_mslp <- pca_decision(smode_data = mslp_s$smode_data)
+info_pca_mslp <- pca_decision(smode_data = mslp_smode$smode_data)
 ```
 A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at `info_clas$summary`
 ![](img/scree_test.png)
@@ -56,7 +56,7 @@ A scree plot is represented to select the number of PCA to retain. We could deci
 ```r
 # Once we have decided on the number of components, we will proceed 
 # with the synoptic classification:
-mslp_s_clas <- synoptclas(smode_data = mslp_s$smode_data, ncomp =  6) 
+mslp_s_clas <- synoptclas(smode_data = mslp_smode$smode_data, ncomp =  6) 
 
 # if you do a little research on the resulting object, you obtain
 # some interesting stats about the classification procedure.
@@ -92,12 +92,15 @@ title(paste("CWT 3"))
 
 **Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
-#And we can add a raytraced layer from that sun direction as well:
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  add_shadow(ray_shade(elmat)) %>%
-  plot_map()
+# Let's to establish a spatial regionalisation based on the 10 precipitation
+# maps derived from the synoptic classification. To do it, we need to convert
+# our data frame prec_grid_s to a raster stack object.
+precp_stack <- cwt_env_raststack(longitude = precp_grid$lon, latitude = precp_grid$lat, 
+                                              cluster_data = mslp_s_clas$clas, 
+                                              grid_data = precp_grid_s$smode_data,
+                                              option = 2)
+# As we note before, be carefull with parameter option.
+# Now, let's to inspect the raster stack!                                              
 ```
 
 ![](tools/readme/fourth.jpg)
