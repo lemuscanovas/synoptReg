@@ -18,25 +18,17 @@ devtools::install_github("lemuscanovas/synoptReg")
 Functions
 ---------
 
-Rayshader has five functions related to hillshading:
+synoptReg has two functions related to read and format data:
 
 -   `read_nc` reads a NetCDF file to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF without date gaps is required.
 -   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3 - month season.
 
 
-Rayshader also has two functions to detect and add water to maps:
+synoptReg also has two functions to performe the PCA:
 
--   `detect_water` uses a flood-fill algorithm to detect bodies of water of a user-specified minimum area.
--   `add_water` uses the output of `detect_water` to add a water color to the map. The user can input their own color, or pass the name of one of the pre-defined palettes from `sphere_shade` to get a matching hue.
+-   `pca_decision` abc.
+-   `synoptclas` abc.
 
-And two functions to display and save your maps:
-
--   `plot_map` Plots the current map. Accepts either a matrix or an array.
--   `save_png` Saves the current map to disk with a user-specified filename.
--   `plot_3d` Creates a 3D map, given a texture and an elevation matrix. You can customize the appearance of the map, as well as add a user-defined water level.
--   `save_3dprint` Writes a stereolithography (STL) file of the current 3D map to create a 3D printable map. The user can specify the physical maximum width of the 3D print when calling the function.
-
-All of these functions are designed to be used with the magrittr pipe `%>%`.
 
 Usage
 -----
