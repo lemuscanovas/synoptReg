@@ -95,12 +95,15 @@ title(paste("CWT 3"))
 # Let's to establish a spatial regionalisation based on the 10 precipitation
 # maps derived from the synoptic classification. To do it, we need to convert
 # our data frame prec_grid_s to a raster stack object.
-precp_stack <- cwt_env_raststack(longitude = precp_grid$lon, latitude = precp_grid$lat, 
-                                              cluster_data = mslp_s_clas$clas, 
-                                              grid_data = precp_grid_s$smode_data,
-                                              option = 2)
+precp_stack <- cwt_env_raststack(longitude = precp_grid$lon, 
+                                 latitude = precp_grid$lat, 
+                                 cluster_data = mslp_s_clas$clas,
+                                 grid_data = precp_grid_s$smode_data,
+                                 option = 2)
 # As we note before, be carefull with parameter option.
-# Now, let's to inspect the raster stack!                                              
+# Now, let's to inspect the raster stack! 
+raster::plot(precp_stack)
+
 ```
 
 ![](tools/readme/fourth.jpg)
