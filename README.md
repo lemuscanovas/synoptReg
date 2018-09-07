@@ -50,7 +50,7 @@ mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = T)
 info_pca_mslp <- pca_decision(smode_data = mslp_s$smode_data)
 ```
 A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at info_clas$summary
-![](img/.jpg)
+![](img/scree_test.jpg)
 
 ```r
 #sphere_shade can shift the sun direction:
