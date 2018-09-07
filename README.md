@@ -112,8 +112,8 @@ raster::plot(precp_stack/10) # data expressed in mm
 # In addition, if we work with larger areas, we can use aggregate and focal
 # to make the posterior regions with "regionalisation" function more continuous.
 pca_precp <- raster_pca(precp_stack)
-
 ```
+<img src="img/precp_pca.png" height="600" />
 
 ![](tools/readme/fifth.jpg)
 
