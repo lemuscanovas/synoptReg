@@ -28,6 +28,7 @@ synoptReg also has two functions to performe the PCA:
 
 -   `pca_decision` abc.
 -   `synoptclas` abc.
+-    ...
 
 
 Usage
@@ -39,46 +40,72 @@ library(synoptReg)
 # First of all, you need a NetCDF containing an atmospheric variable.
 # Use read_nc to read the data easily. The output is a list object as 
 # we shall see below. 
-data(mslp)
+data(mslp) #mean sea level pressure data (ERA-20C)
 
 # Now we need to convert our mslp data into S-mode data frame:
-mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = T)
+mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = TRUE)
 
 # Before to apply the synoptic classification we need some information
 # about the number of PCA to select in the procedure. For this reason,
 # we use pca_decision
-info_pca_mslp <- pca_decision(smode_data = mslp_s$smode_data)
+info_pca_mslp <- pca_decision(smode_data = mslp_smode$smode_data)
 ```
-A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at info_clas$summary
-![](img/.jpg)
+A scree plot is represented to select the number of PCA to retain. We could decide 6 PCA in a quick inspection. We can spend more time analyzing the pca results looking at `info_clas$summary`
+![](img/scree_test.png)
 
 ```r
-#sphere_shade can shift the sun direction:
-elmat %>%
-  sphere_shade(sunangle = 45, texture = "desert") %>%
-  plot_map()
+# Once we have decided on the number of components, we will proceed 
+# with the synoptic classification:
+mslp_s_clas <- synoptclas(smode_data = mslp_smode$smode_data, ncomp =  6) 
+
+# if you do a little research on the resulting object, you obtain
+# some interesting stats about the classification procedure.
+# But now, it's time to represent our synoptic classification
+# So we will use plot_clas to do it!
+plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, 
+          cwt_number = 3, legend.lab = "hPa")
+title("CWT 3")
 ```
-![](tools/readme/second.jpg)
+<img src="img/synopt_clas3.png" height="425" />
+
+As you see, the circulation weather type (CWT) 3 is displayed!
 
 ```r
-#detect_water and add_water adds a water layer to the map:
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  plot_map()
+# Now we would like to know how the precipitation is spatialy 
+# distributed over the Balearic Islands (Spain) when the CWT 3
+# occurs. To do it, we need to read our precp_grid data and 
+# reformat with tidy_cuttime_nc.
+data(precp_grid) 
+precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid, only_convert = TRUE)
 ```
+**Important**: Note that mslp data and precp_grid data must share the same time series (2000-01-01 to 2009-12-31). It is very important!
+```r
+# Now, we use the function plot_env to show the spatial distribution
+# of precipitation based on CWT 3:
+plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat, 
+         cluster_data = mslp_s_clas$clas, grid_data = 
+         precp_grid_s$smode_data, cwt_number = 3, option = 2, 
+         divide_units = 10, legend.lab = "mm")
+title(paste("CWT 3"))
+```
+<img src="img/precp_cwt3.png" height="325" />
 
-![](tools/readme/third.jpg)
+**Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
-#And we can add a raytraced layer from that sun direction as well:
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  add_shadow(ray_shade(elmat)) %>%
-  plot_map()
+# Let's to establish a spatial regionalisation based on the 10 precipitation
+# maps derived from the synoptic classification. To do it, we need to convert
+# our data frame prec_grid_s to a raster stack object.
+precp_stack <- cwt_env_raststack(longitude = precp_grid$lon, 
+                                 latitude = precp_grid$lat, 
+                                 cluster_data = mslp_s_clas$clas,
+                                 grid_data = precp_grid_s$smode_data,
+                                 option = 2)
+# As we note before, be carefull with parameter option.
+# Now, let's to inspect the raster stack! 
+raster::plot(precp_stack/10) # data expressed in mm
 ```
+<img src="img/precp_raststack.png" height="500" />
 
-![](tools/readme/fourth.jpg)
 ``` r
 elmat %>%
   sphere_shade( texture = "desert") %>%
