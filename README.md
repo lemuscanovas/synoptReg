@@ -114,7 +114,7 @@ raster::plot(precp_stack/10) # data expressed in mm
 pca_precp <- raster_pca(precp_stack)
 ```
 <img src="img/precp_pca.png" height="600" />
-Now we are observing the spatial patterns of the precipitaiton over the Balearic Islands
+Now, we observe the spatial patterns of the precipitaiton over the Balearic Islands.
 
 ``` r
 # Nevertheless, we want a final map with the precipitation regions/regimes of our
@@ -125,3 +125,6 @@ raster::plot(precp_region$regionalisation, legend = F,
              col = c("orange", "green4", "darkred","lightblue"))
 ```
 <img src="img/regionalisation.png" height="300" />
+
+## Any doubt?
+Feel free to contact me: mlemus@ub.edu
