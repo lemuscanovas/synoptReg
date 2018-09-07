@@ -114,32 +114,6 @@ raster::plot(precp_stack/10) # data expressed in mm
 pca_precp <- raster_pca(precp_stack)
 ```
 <img src="img/precp_pca.png" height="600" />
+Now we are observing the spatial patterns of the precipitaiton over the Balearic Islands
 
-![](tools/readme/fifth.jpg)
-
-Rayshader also supports 3D mapping by passing a texture map (either external or one produced by rayshader) into the `plot_3d` function.
-
-``` r
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  add_shadow(ray_shade(elmat)) %>%
-  add_shadow(ambient_shade(elmat)) %>%
-  plot_3d(elmat)
-```
-
-![](tools/readme/sixth.jpg)
-
-You can also easily add a water layer by setting `water = TRUE` (and setting `waterdepth` if the water level is not 0). You can customize the appearance and transparancy of the water layer via arguments to `plot_3d`. Here's an example using the built-in example bathymetric/topographic data of Monterey Bay, CA `montereybay` (zscale for a 1-to-1 ratio  using `montereybay` would be 200, but in plot_3d is set to 50 to give a 4x exaggerated height in the z-direction) :
-
-``` r
-montereybay %>% 
-    sphere_shade(texture = "imhof1") %>% 
-    add_shadow(ray_shade(montereybay,zscale=200)) %>%
-    add_shadow(ambient_shade(montereybay,zscale=200)) %>%
-    plot_3d(montereybay, water=TRUE, zscale=50, theta=-45,
-            waterdepth = 0, wateralpha = 0.6, watercolor = "#88DDFF",
-            waterlinecolor = "white", waterlinealpha = 0.5)
-```
-
-![](tools/readme/seventh.jpg)
+.... Manca escriure sobre la funció **regionalisation**
