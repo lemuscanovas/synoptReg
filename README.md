@@ -64,7 +64,8 @@ mslp_s_clas <- synoptclas(smode_data = mslp_s$smode_data, ncomp =  6)
 plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, cwt_number = 3, legend.lab = "hPa")
 title(paste("CWT 3"))
 ```
-![](img/synopt_clas3.png)
+<img src="img/synopt_clas3.png" height="425" />
+
 As you see, the circulation weather type (CWT) 3 is displayed!
 
 ```r
