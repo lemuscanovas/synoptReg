@@ -28,6 +28,7 @@ synoptReg also has two functions to performe the PCA:
 
 -   `pca_decision` abc.
 -   `synoptclas` abc.
+-    ...
 
 
 Usage
