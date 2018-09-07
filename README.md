@@ -104,7 +104,7 @@ precp_stack <- cwt_env_raststack(longitude = precp_grid$lon,
 # Now, let's to inspect the raster stack! 
 raster::plot(precp_stack/10) # data expressed in mm
 ```
-<img src="img/precp_raststack.png" height="500" />
+<img src="img/precp_raststack.png" height="600" />
 
 ``` r
 elmat %>%
