@@ -40,7 +40,7 @@ library(synoptReg)
 # First of all, you need a NetCDF containing an atmospheric variable.
 # Use read_nc to read the data easily. The output is a list object as 
 # we shall see below. 
-data(mslp)
+data(mslp) #mean sea level pressure data (ERA-20C)
 
 # Now we need to convert our mslp data into S-mode data frame:
 mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = TRUE)
@@ -75,13 +75,21 @@ As you see, the circulation weather type (CWT) 3 is displayed!
 # distributed over the Balearic Islands (Spain) when the CWT 3
 # occurs. To do it, we need to read our precp_grid data and 
 # reformat with tidy_cuttime_nc.
-elmat %>%
-  sphere_shade(texture = "desert") %>%
-  add_water(detect_water(elmat), color="desert") %>%
-  plot_map()
+data(precp_grid) 
+precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid, only_convert = TRUE)
 ```
-
-![](tools/readme/third.jpg)
+**Important**: Note that mslp data and precp_grid data must share the same time series (2000-01-01 to 2009-12-31). It is very important!
+```r
+# Now, we use the function plot_env to show the spatial distribution
+# of precipitation based on CWT 3:
+plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat, 
+         cluster_data = mslp_s_clas$clas, grid_data = 
+         precp_grid_s$smode_data, cwt_number = 3, option = 2, 
+         divide_units = 10, legend.lab = "mm")
+title(paste("CWT 3"))
+```
+<img src="img/precp_cwt3.png" height="375" />
+**Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
 #And we can add a raytraced layer from that sun direction as well:
 elmat %>%
