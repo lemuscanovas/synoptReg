@@ -102,11 +102,10 @@ precp_stack <- cwt_env_raststack(longitude = precp_grid$lon,
                                  option = 2)
 # As we note before, be carefull with parameter option.
 # Now, let's to inspect the raster stack! 
-raster::plot(precp_stack)
-
+raster::plot(precp_stack/10) # data expressed in mm
 ```
+<img src="img/precp_raststack.png" height="500" />
 
-![](tools/readme/fourth.jpg)
 ``` r
 elmat %>%
   sphere_shade( texture = "desert") %>%
