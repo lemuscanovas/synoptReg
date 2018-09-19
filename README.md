@@ -34,7 +34,7 @@ There are two functions to visualize the results about the aftermentioned synopt
 -   `plot_clas` plots the synoptic classification.
 -   `plot_env`  plots the daily mean spatial distribution of an environmental data based on the synoptic classification.
 
-Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute a automatic spatial regionalisation (clustering):
+Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute an automatic spatial regionalisation (clustering):
 
 -   `cwt_env_raststack` converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
 -   `raster_pca` performs a PCA on a Raster Stack object.
