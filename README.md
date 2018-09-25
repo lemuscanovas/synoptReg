@@ -4,7 +4,7 @@ synoptReg<img src="img/logo.png" align="right"  height="160" />
 Overview
 --------
 
-**synoptReg** is an open source package fot computing synoptic climate classifications and spatial regionalizations of environmental data.
+**synoptReg** is an open source package for computing synoptic climate classifications and spatial regionalizations of environmental data.
 
 Installation
 ------------
@@ -21,14 +21,24 @@ Functions
 synoptReg has two functions related to read and format data:
 
 -   `read_nc` reads a NetCDF file to extract the atmospheric or environmental variable, longitudes, latitudes and dates. A continuous NetCDF without date gaps is required.
--   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3 - month season.
+-   `tidy_cuttime_nc` formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or decide if you want work with the full year or only with 3 - month season.
 
 
-synoptReg also has two functions to performe the PCA:
+synoptReg also has two functions to perform the PCA approach to compute the synoptic classification:
 
--   `pca_decision` abc.
--   `synoptclas` abc.
--    ...
+-   `pca_decision` plots the explained variance against the number of the principal component. In addition, it returns all the information about the PCA performance.
+-   `synoptclas` establishes a synoptic classification based on any atmospheric variable (i.e. mean sea level pressure, geoptential height at 500 hPa, etc).
+
+There are two functions to visualize the results about the aftermentioned synoptic classification:
+
+-   `plot_clas` plots the synoptic classification.
+-   `plot_env`  plots the daily mean spatial distribution of an environmental data based on the synoptic classification.
+
+Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute an automatic spatial regionalisation (clustering):
+
+-   `cwt_env_raststack` converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
+-   `raster_pca` performs a PCA on a Raster Stack object.
+-   `raster_pca` Performs an unspervised clustering of the Raster Stack object.
 
 
 Usage
@@ -114,16 +124,17 @@ raster::plot(precp_stack/10) # data expressed in mm
 pca_precp <- raster_pca(precp_stack)
 ```
 <img src="img/precp_pca.png" height="600" />
-Now we are observing the spatial patterns of the precipitaiton over the Balearic Islands
+Now, we observe the spatial patterns of the precipitaiton over the Balearic Islands.
 
 ``` r
 # Nevertheless, we want a final map with the precipitation regions/regimes of our
 # study area. You can use a for loop to find the ideal number of regions. In this
-# case we have apply the regionalisation with 4 centers (regions).
+# case we have applied the regionalisation with 4 centers (regions).
 precp_region <- regionalisation(pca_precp$rasterPCA, centers = 4)
 raster::plot(precp_region$regionalisation, legend = F, 
              col = c("orange", "green4", "darkred","lightblue"))
 ```
+<img src="img/regionalisation.png" height="300" />
 
-
-.... Manca escriure sobre la funció **regionalisation**
+## Any doubt?
+Feel free to contact me: mlemus@ub.edu
