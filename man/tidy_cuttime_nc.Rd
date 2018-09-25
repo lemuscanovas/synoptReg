@@ -26,7 +26,7 @@ A list with: \itemize{
 }
 }
 \description{
-This function formats the 3D-array output from \code{read_nc} function to an S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3 - month season.
+This function format the 3D-array output from \code{read_nc} function to a S-mode dataframe (variables = grid points, observations = days). Optionally, you can set the time period between specific years and/or specify if you want work with the full year or only with 3-month season.
 }
 \examples{
 # Load data (mslp or precp_grid)
