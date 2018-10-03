@@ -23,7 +23,6 @@
 #' raster_precp <- cwt_env_raststack(longitude = precp_grid$lon,
 #'                 latitude = precp_grid$lat, grid_data = precp_data$smode_data,
 #'                 cluster_data = smode_clas$clas, option = 2)
-
 #' @export
 
 cwt_env_raststack <- function(longitude, latitude, grid_data, cluster_data, option = 1,

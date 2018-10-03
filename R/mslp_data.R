@@ -10,7 +10,7 @@
 #'
 #' @format A list with values of pressure and coordinates (longitude, latitude, time)
 #' \describe{
-#'   \item{datavar}{mean sea level pressure values, "Pa"}
+#'   \item{datavar}{mean sea level pressure values, Pa}
 #'   \item{lon}{46}
 #'   \item{latitude}{31}
 #'   \item{dates}{3653, ten years (2000-01-01 / 2009-12-31)}
@@ -19,7 +19,7 @@
 #'
 #' @references Poli et al. (2016)
 #' \emph{ERA-20C: An Atmospheric Reanalysis of the Twentieth Century.
-#'              J. Climate, 29, 4083–4097, https://doi.org/10.1175/JCLI-D-15-0556.1}
+#'              J. Climate, 29, https://doi.org/10.1175/JCLI-D-15-0556.1}
 #'
 #' @examples
 #' data(mslp)

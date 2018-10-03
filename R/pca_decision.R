@@ -5,7 +5,7 @@
 #' @param smode_data S-mode dataframe of the reanalysis variable. I.e. output obtained from \code{tidy_cuttime_nc} function.
 #'
 #' @return a list with: \itemize{
-#'    \item{A list with class \code{"princomp"} containing all the results of the PCA }
+#'    \item{A list with class \code{princomp} containing all the results of the PCA }
 #'    \item{A data frame containing the main results of the 30 first PCA (standard deviation, proportion of variance and cumulative variance).}
 #' }
 #'

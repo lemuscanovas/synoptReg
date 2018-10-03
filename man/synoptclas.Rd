@@ -48,7 +48,7 @@ smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
 }
 \references{
 {
-Esteban, P. , Jones, P. D., Martín‐Vide, J. and Mases, M. (2005)
+Esteban, P. , Jones, P. D., MartC-nb
 \emph{Atmospheric circulation patterns related to heavy snowfall days in Andorra, Pyrenees}
 Int. J. Climatol. 25: 319-329. doi:10.1002/joc.1103
 }
