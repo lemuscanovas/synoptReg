@@ -9,7 +9,12 @@ Overview
 Installation
 ------------
 
+![#1589F0](https://placehold.it/15/1589F0/000000?text=+) **Now also in CRAN!**
+
 ``` r
+# To install the CRAN version:
+install.packages("synoptReg")
+
 # To install the latest version from Github:
 # install.packages("devtools")
 devtools::install_github("lemuscanovas/synoptReg")
