@@ -141,9 +141,9 @@ Now, we observe the spatial patterns of the precipitaiton over the Balearic Isla
 ``` r
 # Nevertheless, we want a final map with the precipitation regions/regimes of our
 # study area. You can use a for loop to find the ideal number of regions. In this
-# case we have applied the regionalisation with 4 centers (regions).
-precp_region <- regionalisation(pca_precp$rasterPCA, centers = 4)
-raster::plot(precp_region$regionalisation, legend = F, 
+# case we have applied the regionalization with 4 centers (regions).
+precp_region <- regionalization(pca_precp$rasterPCA, centers = 4)
+raster::plot(precp_region$regionalization, legend = F, 
              col = c("orange", "green4", "darkred","lightblue"))
 ```
 <img src="img/regionalisation.png" height="300" />
