@@ -97,29 +97,37 @@ mslp_s_clas <- synoptclas(smode_data = mslp_smode$smode_data, ncomp =  6)
 # format. 
 raster_cwt <- raster_clas(mslp$lon, mslp$lat, mslp_s_clas$grouped_data)
 
-# This raster stack can be plotted by ggplot, rasterVis or sp:
+# This raster stack can be plotted by ggplot, rasterVis or sp. In this case,
+# the CWT 3 is displayed:
+
 library(sp)
-spplot(raster_cwt,
+library(maptools)
+require(raster)
+
+# Reading the world shapefile
+limit <- readShapeSpatial("TM_WORLD_BORDERS_SIMPL-0.3.shp")
+
+# selecting CWT3
+cwt3 <- raster_cwt$CWT3
+
+# plotting CWT 3
+spplot(cwt3,
        sp.layout = list(limit, first = FALSE),
-       names.attr=names(raster_cwt),
-       at = seq(round(min(minValue(raster_cwt))),round(max(maxValue(raster_cwt))+4), 2),
-       zlim = c(round(min(minValue(raster_cwt))),round(max(maxValue(raster_cwt)))),
+       names.attr=names(cwt3),
+       at = seq(round(min(minValue(cwt3))-1),round(max(maxValue(cwt3))+4), 2),
+       zlim = c(min(minValue(cwt3)),round(max(maxValue(cwt3)))),
        col.regions=colorRamps::matlab.like2(100),
        par.settings = list(strip.background=list(col="white"), fontsize = list(text = 7)),
        contour=TRUE,
-       colorkey = F,
+       colorkey = T,
        col='black',
        pretty=TRUE,
        scales=list(draw = TRUE),
        labels=TRUE)
-
-plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, 
-          cwt_number = 3, legend.lab = "hPa")
-title("CWT 3")
 ```
-<img src="img/cwt_eu.jpg" height="800" />
+<img src="img/cwt3.png" height="450" />
 
-As you see, the circulation weather type (CWT) 3 is displayed!
+As you see, the synoptic classification is displayed!
 
 ```r
 # Now we would like to know how the precipitation is spatialy 
