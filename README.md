@@ -90,14 +90,34 @@ A scree plot is represented to select the number of PCA to retain. We could deci
 mslp_s_clas <- synoptclas(smode_data = mslp_smode$smode_data, ncomp =  6) 
 
 # if you do a little research on the resulting object, you obtain
-# some interesting stats about the classification procedure.
-# But now, it's time to represent our synoptic classification
-# So we will use plot_clas to do it!
+# some interesting stats about the classification procedure. For example,
+# yearly or monthly temporal series can be obtained.
+# But now, it's time to represent our synoptic classification.
+# So we will use raster_clas to obtain the classification in a raster
+# format. 
+raster_cwt <- raster_clas(mslp$lon, mslp$lat, mslp_s_clas$grouped_data)
+
+# This raster stack can be plotted by ggplot, rasterVis or sp:
+library(sp)
+spplot(raster_cwt,
+       sp.layout = list(limit, first = FALSE),
+       names.attr=names(raster_cwt),
+       at = seq(round(min(minValue(raster_cwt))),round(max(maxValue(raster_cwt))+4), 2),
+       zlim = c(round(min(minValue(raster_cwt))),round(max(maxValue(raster_cwt)))),
+       col.regions=colorRamps::matlab.like2(100),
+       par.settings = list(strip.background=list(col="white"), fontsize = list(text = 7)),
+       contour=TRUE,
+       colorkey = F,
+       col='black',
+       pretty=TRUE,
+       scales=list(draw = TRUE),
+       labels=TRUE)
+
 plot_clas(mslp$lon, mslp$lat, grouped_data = mslp_s_clas$grouped_data, 
           cwt_number = 3, legend.lab = "hPa")
 title("CWT 3")
 ```
-<img src="img/cwt_eu.jpg" height="425" />
+<img src="img/cwt_eu.jpg" height="800" />
 
 As you see, the circulation weather type (CWT) 3 is displayed!
 
