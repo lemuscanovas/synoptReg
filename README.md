@@ -123,7 +123,7 @@ spplot(cwt3,
        col='black',
        pretty=TRUE,
        scales=list(draw = TRUE),
-       labels=TRUE)
+       labels=TRUE) 
 ```
 <img src="img/cwt3.png" height="450" />
 
