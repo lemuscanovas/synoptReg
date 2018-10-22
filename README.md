@@ -147,7 +147,7 @@ plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat,
          divide_units = 10, legend.lab = "mm")
 title(paste("CWT 3"))
 ```
-<img src="img/precp_cwt3.png" height="325" />
+<img src="img/cwt_env3.png" height="450" />
 
 **Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
