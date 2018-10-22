@@ -22,8 +22,6 @@ News!
 - The function `raster_cwt2env` (old `cwt_env_raststack`) has been added. The function has been optimized with respect to the previous one. It allows to generate a `Raster Stack` object of our environmental variable based on the CWT. 
 - The functions `plot_clas` and `plot_env have been suppressed, because they did not offer an optimal visualization of the data. 
 
-Translated with www.DeepL.com/Translator
-
 Installation
 ------------
 
@@ -54,8 +52,8 @@ synoptReg also has two functions to perform the PCA approach to compute the syno
 
 There are two functions to visualize the results about the aftermentioned synoptic classification:
 
--   `plot_clas` plots the synoptic classification.
--   `plot_env`  plots the daily mean spatial distribution of an environmental data based on the synoptic classification.
+-   `raster_clas` converts the dataframe of the synoptic classification data into a Raster Stack format.
+-   `raster_cwt2env`  converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
 
 Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute an automatic spatial regionalisation (clustering):
 
