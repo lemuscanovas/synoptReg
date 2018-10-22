@@ -13,16 +13,27 @@ Overview
 
 **synoptReg** is an open source package for computing synoptic climate classifications and spatial regionalizations of environmental data.
 
+News!
+------------
+Version 0.2.0 was updated to GitHub! 
+
+new releases of version 0.2.0:
+- The function `raster_clas` has been added. This converts our synoptic classification into a `Raster Stack` object, allowing a better graphical output than the one offered so far by `plot_clas`.  Now you can use `ggplot2`, `rasterVis` or `sp` to visualize the result.
+- The function `raster_cwt2env` (old `cwt_env_raststack`) has been added. The function has been optimized with respect to the previous one. It allows to generate a `Raster Stack` object of our environmental variable based on the CWT. 
+- The functions `plot_clas` and `plot_env have been suppressed, because they did not offer an optimal visualization of the data. 
+
+Translated with www.DeepL.com/Translator
+
 Installation
 ------------
 
 ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) **Now also in CRAN!**
 
 ``` r
-# To install the CRAN version:
+# To install the CRAN version (0.1.0):
 install.packages("synoptReg")
 
-# To install the latest version from Github:
+# To install the latest version (0.2.0) from Github:
 # install.packages("devtools")
 devtools::install_github("lemuscanovas/synoptReg")
 ```
