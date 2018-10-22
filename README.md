@@ -50,7 +50,7 @@ synoptReg also has two functions to perform the PCA approach to compute the syno
 -   `pca_decision` plots the explained variance against the number of the principal component. In addition, it returns all the information about the PCA performance.
 -   `synoptclas` establishes a synoptic classification based on any atmospheric variable (i.e. mean sea level pressure, geoptential height at 500 hPa, etc).
 
-There are two functions to visualize the results about the aftermentioned synoptic classification:
+There are two functions to rasterize the results in order to get a cool visualization of the aftermentioned synoptic classification:
 
 -   `raster_clas` converts the dataframe of the synoptic classification data into a Raster Stack format.
 -   `raster_cwt2env`  converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
