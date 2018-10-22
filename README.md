@@ -147,27 +147,13 @@ plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat,
          divide_units = 10, legend.lab = "mm")
 title(paste("CWT 3"))
 ```
-<img src="img/cwt_env3.png" height="450" />
+<img src="img/cwt_env3.png" height="400" />
 
 **Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
-# Let's to establish a spatial regionalisation based on the 10 precipitation
-# maps derived from the synoptic classification. To do it, we need to convert
-# our data frame prec_grid_s to a raster stack object.
-precp_stack <- cwt_env_raststack(longitude = precp_grid$lon, 
-                                 latitude = precp_grid$lat, 
-                                 cluster_data = mslp_s_clas$clas,
-                                 grid_data = precp_grid_s$smode_data,
-                                 option = 2)
-# As we note before, be carefull with parameter option.
-# Now, let's to inspect the raster stack! 
-raster::plot(precp_stack/10) # data expressed in mm
-```
-<img src="img/precp_raststack.png" height="600" />
-
-``` r
-# Good! But we are looking for a simplified version, in order to obtain a
-# schematic regionalisation. So we apply a "raster_pca" over our raster stack
+# Let's to establish a spatial regionalisation based on the 12 precipitation
+# maps derived from the synoptic classification. In order to obtain a
+# schematic regionalisation, we apply a "raster_pca" over our raster stack
 # In addition, if we work with larger areas, we can use aggregate and focal
 # to make the posterior regions with "regionalisation" function more continuous.
 pca_precp <- raster_pca(precp_stack)
