@@ -11,6 +11,8 @@
 ~%2FsynoptReg%2FR%2Fplot_clas.R="D0AB0809"
 ~%2FsynoptReg%2FR%2Fplot_env.R="88DD9F6E"
 ~%2FsynoptReg%2FR%2Fprecp_data.R="AB3B986D"
+~%2FsynoptReg%2FR%2Fraster_clas.R="5237166C"
+~%2FsynoptReg%2FR%2Fraster_cwt2env.R="C468968B"
 ~%2FsynoptReg%2FR%2Fraster_pca.R="E5956469"
 ~%2FsynoptReg%2FR%2Fread_nc.R="3D53D30E"
 ~%2FsynoptReg%2FR%2Fregionalisation.R="597093D4"
