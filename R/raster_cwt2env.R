@@ -1,6 +1,6 @@
 #' Raster conversion of environmental data based on CWT
 #'
-#' This function convert the dataframe of the environmental data based on the synoptic classification into a Raster Stack format.
+#' This function converts the dataframe of the environmental data based on the synoptic classification into a Raster Stack format.
 #'
 #' @param longitude Numeric vector containing longitudes
 #' @param latitude Numeric vector containing latitudes
