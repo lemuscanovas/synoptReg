@@ -124,6 +124,8 @@ spplot(cwt3,
        pretty=TRUE,
        scales=list(draw = TRUE),
        labels=TRUE) 
+grid.text("MDP (mm)", x=unit(0.900,"npc"), y=unit(0.50, "npc"), rot = -90, gp=gpar(fontsize=7))
+
 ```
 <img src="img/cwt3.png" height="450" />
 
@@ -139,24 +141,38 @@ precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid, only_convert = TRUE)
 ```
 **Important**: Note that mslp data and precp_grid data must share the same time series (2000-01-01 to 2009-12-31). It is very important!
 ```r
-# Now, we use the function plot_env to show the spatial distribution
-# of precipitation based on CWT 3:
-plot_env(longitude = precp_grid$lon, latitude = precp_grid$lat, 
-         cluster_data = mslp_s_clas$clas, grid_data = 
-         precp_grid_s$smode_data, cwt_number = 3, option = 2, 
-         divide_units = 10, legend.lab = "mm")
-title(paste("CWT 3"))
+# Now, we use the function raster_cwt2env to get the precipitation raster
+# based on CWT 3:
+raster_env <- raster_cwt2env(precp_grid$lon, precp_grid$lat, mslp_s_clas$clas, 
+                            grid_data = precp_grid_s$smode_data, option = 2)
+# And then, we can plot this raster:
+raster_env3 <- raster_env$CWT3
+
+spplot(raster_env3/10,
+       sp.layout = list(limit, first = FALSE),
+       names.attr=names(raster_env3),
+       at = seq(round(min(minValue(raster_env3/10))),round(max(maxValue(raster_env3))+0.5),0.2),
+       # zlim = c(round(min(minValue(raster_env3))),round(max(maxValue(raster_env3)))),
+       col.regions=rev(colorRamps::matlab.like2(100)),
+       par.settings = list(strip.background=list(col="white"), fontsize = list(text = 8)),
+       contour=FALSE,
+       colorkey = TRUE,
+       col='black',
+       pretty=TRUE,
+       scales=list(draw = TRUE),
+       labels=TRUE)
+grid.text("MDP (mm)", x=unit(0.900,"npc"), y=unit(0.50, "npc"), rot = -90, gp=gpar(fontsize=7))
 ```
 <img src="img/cwt_env3.png" height="400" />
 
-**Important**: Warning: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
+**Important**: be careful with option = 2. You can decide between 1 and 2. It is referred to lon and lat structure in the NetCDF file. So, if 1 is wrong, try 2.
 ``` r
 # Let's to establish a spatial regionalisation based on the 12 precipitation
 # maps derived from the synoptic classification. In order to obtain a
 # schematic regionalisation, we apply a "raster_pca" over our raster stack
 # In addition, if we work with larger areas, we can use aggregate and focal
 # to make the posterior regions with "regionalisation" function more continuous.
-pca_precp <- raster_pca(precp_stack)
+pca_precp <- raster_pca(raster_env)
 ```
 <img src="img/precp_pca.png" height="600" />
 Now, we observe the spatial patterns of the precipitaiton over the Balearic Islands.
