@@ -20,7 +20,7 @@ News!
 *new releases of version 0.2.0:*
 - The function `raster_clas` has been added. This converts our synoptic classification into a `Raster Stack` object, allowing a better graphical output than the one offered so far by `plot_clas`.  Now you can use `ggplot2`, `rasterVis` or `sp` to visualize the result.
 - The function `raster_cwt2env` (old `cwt_env_raststack`) has been added. The function has been optimized with respect to the previous one. It allows to generate a `Raster Stack` object of our environmental variable based on the CWT. 
-- The functions `plot_clas` and `plot_env have been suppressed, because they did not offer an optimal visualization of the data. 
+- The functions `plot_clas` and `plot_env` have been suppressed, because they did not offer an optimal visualization of the data. 
 
 Installation
 ------------
@@ -52,14 +52,13 @@ synoptReg also has two functions to perform the PCA approach to compute the syno
 
 There are two functions to rasterize the results in order to get a cool visualization of the aftermentioned synoptic classification:
 
--   `raster_clas` converts the dataframe of the synoptic classification data into a Raster Stack format.
--   `raster_cwt2env`  converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
+-   `raster_clas` converts the dataframe of the synoptic classification data into a RasterStack format.
+-   `raster_cwt2env`  converts the dataframe of the environmental data based on the synoptic classification into a RasterStack object.
 
 Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute an automatic spatial regionalisation (clustering):
 
--   `cwt_env_raststack` converts the dataframe of the environmental data based on the synoptic classification into a raster stack format.
--   `raster_pca` performs a PCA on a Raster Stack object.
--   `raster_pca` Performs an unspervised clustering of the Raster Stack object.
+-   `raster_pca` performs a PCA on a RasterStack object.
+-   `regionalization` Performs an unspervised clustering of the RasterStack object.
 
 
 Usage
