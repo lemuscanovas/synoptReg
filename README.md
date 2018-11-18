@@ -15,7 +15,7 @@ Overview
 
 News!
 ------------
-**Version 0.2.0 was updated to GitHub!** 
+**Version 0.2.0 was updated to CRAN!** 
 
 *new releases of version 0.2.0:*
 - The function `raster_clas` has been added. This converts our synoptic classification into a `Raster Stack` object, allowing a better graphical output than the one offered so far by `plot_clas`.  Now you can use `ggplot2`, `rasterVis` or `sp` to visualize the result.
@@ -28,7 +28,7 @@ Installation
 ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) **Now also in CRAN!**
 
 ``` r
-# To install the CRAN version (0.1.0):
+# To install the CRAN version (0.2.0):
 install.packages("synoptReg")
 
 # To install the latest version (0.2.0) from Github:
