@@ -11,13 +11,13 @@ raster_clas(longitude, latitude, grouped_data)
 
 \item{latitude}{Numeric vector containing latitudes}
 
-\item{grouped_data}{Data frame. S-mode data frame containing an integer column with the weather types. i.e. output obtained from \code{synoptclas} function.}
+\item{grouped_data}{Data frame. S-mode data frame containing an integer column with the circulation types. i.e. output obtained from \code{synoptclas} function.}
 }
 \value{
-a Raster Stack containing the circulation weather types.
+a Raster Stack containing the circulation types.
 }
 \description{
-This function convert the dataframe of the synoptic classification data into a Raster Stack format.
+This function converts the dataframe of the synoptic classification data into a Raster Stack format.
 }
 \examples{
 # Load data (mslp)
@@ -26,7 +26,7 @@ data(mslp)
 smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
 # classification performance
 smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
-# convert all the precipitation maps based on CWT to a raster stack
+# convert all the precipitation maps based on CT to a raster stack
 raster_clas(longitude = mslp$lon, latitude = mslp$lat,
             grouped_data = smode_clas$grouped_data)
 

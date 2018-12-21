@@ -2,7 +2,7 @@
 
 export(pca_decision)
 export(raster_clas)
-export(raster_cwt2env)
+export(raster_ct2env)
 export(raster_pca)
 export(read_nc)
 export(regionalization)

@@ -15,11 +15,11 @@ synoptclas(smode_data, ncomp, extreme_scores = 2)
 }
 \value{
 A list with: \itemize{
-   \item{A data frame containing data grouped by circulation weather types ("grouped_data").}
-   \item{An integer with the circulation weather types ("clas").}
-   \item{A data frame containing the number and percentage of days assigned to each weather type ("cwt_freq").}
-   \item{A data frame containing the number of days assigned to each weather type by month ("monthly_freq").}
-   \item{A data frame containing the number of days assigned to each weather type by year ("annual_freq").}
+   \item{A data frame containing data grouped by circulation types ("grouped_data").}
+   \item{An integer with the circulation types ("clas").}
+   \item{A data frame containing the number and percentage of days assigned to each circulation type ("ct_freq").}
+   \item{A data frame containing the number of days assigned to each circulation type by month ("monthly_freq").}
+   \item{A data frame containing the number of days assigned to each circulation type by year ("annual_freq").}
    \item{The 'rotated' loadings matrix of class \code{"loadings"} ("rotated_loadings").}
    \item{The scores of the supplied data on the principal components ("scores").}
    \item{The coordinates of the scores used to perform the k-means clustering. For more information, read Esteban et al. (2005)("scores_coordinates").}

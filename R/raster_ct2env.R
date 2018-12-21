@@ -1,4 +1,4 @@
-#' Raster conversion of environmental data based on CWT
+#' Raster conversion of environmental data based on CT
 #'
 #' This function converts the dataframe of the environmental data based on the synoptic classification into a Raster Stack format.
 #'
@@ -19,37 +19,37 @@
 #' precp_data <- tidy_cuttime_nc(precp_grid, only_convert = TRUE)
 #' # classification performance
 #' smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
-#' # convert all the precipitation maps based on CWT to a raster stack
-#' raster_precp <- raster_cwt2env(longitude = precp_grid$lon,
+#' # convert all the precipitation maps based on CT to a raster stack
+#' raster_precp <- raster_ct2env(longitude = precp_grid$lon,
 #'                 latitude = precp_grid$lat, clas = smode_clas$clas,
 #'                 grid_data = precp_data$smode_data, option = 2)
 #'
 #' @export
 
-raster_cwt2env <- function(longitude, latitude, clas, grid_data, option = 1,
+raster_ct2env <- function(longitude, latitude, clas, grid_data, option = 1,
                            na.rm = TRUE) {
 
-  mean_cwt <- list()
+  mean_ct <- list()
 
   for (ii in 1:length(unique(clas))) {
-    grid_cwt <- cbind.data.frame(clas, grid_data)
-    colnames(grid_cwt)[1] <- "CWT"
-    CWT <- subset(grid_cwt, CWT == ii)
-    CWT <- CWT[, -c(1)]
-    CWT <- colMeans(CWT, na.rm = na.rm)
-    mean_cwt[[ii]] <- CWT
+    grid_ct <- cbind.data.frame(clas, grid_data)
+    colnames(grid_ct)[1] <- "CT"
+    CT <- subset(grid_ct, CT == ii)
+    CT <- CT[, -c(1)]
+    CT <- colMeans(CT, na.rm = na.rm)
+    mean_ct[[ii]] <- CT
   }
 
-  # store results in df with all mean cwt
-  df_all_cwt <- do.call(cbind.data.frame, mean_cwt)
-  colnames(df_all_cwt) <- 1:length(unique(clas))
+  # store results in df with all mean_ct
+  df_all_ct <- do.call(cbind.data.frame, mean_ct)
+  colnames(df_all_ct) <- 1:length(unique(clas))
 
-  spatial_matrix_pcp_cwt <- list()
+  spatial_matrix_pcp_ct <- list()
   message("converting grid_data to raster...")
 
   if (option == 1) {
     for (ii in 1:length(unique(clas))) {
-      spatial_matrix_pcp_cwt[[ii]] <- apply(matrix(df_all_cwt[, ii], nrow = length(longitude),
+      spatial_matrix_pcp_ct[[ii]] <- apply(matrix(df_all_ct[, ii], nrow = length(longitude),
                                                    ncol = length(latitude)), 1, rev)
     }
 
@@ -57,14 +57,14 @@ raster_cwt2env <- function(longitude, latitude, clas, grid_data, option = 1,
 
   } else if (option == 2) {
     for (ii in 1:length(unique(clas))) {
-      spatial_matrix_pcp_cwt[[ii]] <- matrix(df_all_cwt[, ii], nrow = length(latitude),
+      spatial_matrix_pcp_ct[[ii]] <- matrix(df_all_ct[, ii], nrow = length(latitude),
                                              ncol = length(longitude))
     }
 
     warning("Process completed! BUT if error plot is displayed when you use rasterPCA, try option = 1")
   }
 
-  grid_list <- spatial_matrix_pcp_cwt
+  grid_list <- spatial_matrix_pcp_ct
   rastlist <- list()
 
   for (ii in 1:length(grid_list)) {
@@ -77,15 +77,15 @@ raster_cwt2env <- function(longitude, latitude, clas, grid_data, option = 1,
   #raster creation
   raststack <- raster::stack(rastlist)
   if (option == 2) {
-    raster_cwt_env <- raster::flip(raststack, 2)
+    raster_ct_env <- raster::flip(raststack, 2)
   } else {
-    raster_cwt_env <- raststack
+    raster_ct_env <- raststack
   }
 
   # seting raster extent
   ext <- raster::extent(min(longitude), max(longitude), min(latitude), max(latitude))
-  raster::extent(raster_cwt_env) <- ext
-  names(raster_cwt_env) <- paste0("CWT", 1:length(grid_list))
+  raster::extent(raster_ct_env) <- ext
+  names(raster_ct_env) <- paste0("CT", 1:length(grid_list))
 
-  return(raster_cwt_env)
+  return(raster_ct_env)
 }
