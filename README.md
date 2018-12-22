@@ -31,7 +31,7 @@ Installation
 # To install the CRAN version (0.2.0):
 install.packages("synoptReg")
 
-# To install the latest version (0.2.0) from Github:
+# To install the latest version (0.2.1) from Github:
 # install.packages("devtools")
 devtools::install_github("lemuscanovas/synoptReg")
 ```
