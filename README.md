@@ -15,12 +15,10 @@ Overview
 
 News!
 ------------
-**Version 0.2.0 was updated to CRAN!** 
+**Version 0.2.1 was updated to CRAN!** 
 
-*new releases of version 0.2.0:*
-- The function `raster_clas` has been added. This converts our synoptic classification into a `Raster Stack` object, allowing a better graphical output than the one offered so far by `plot_clas`.  Now you can use `ggplot2`, `rasterVis` or `sp` to visualize the result.
-- The function `raster_cwt2env` (old `cwt_env_raststack`) has been added. The function has been optimized with respect to the previous one. It allows to generate a `Raster Stack` object of our environmental variable based on the CWT. 
-- The functions `plot_clas` and `plot_env` have been suppressed, because they did not offer an optimal visualization of the data. 
+*new releases of version 0.2.1:*
+- The function `raster_cwt2env` has been renamed to `raster_ct2env`. The output objects related to de circulation types are called "CT" instead of "CWT".
 
 Installation
 ------------
@@ -28,7 +26,7 @@ Installation
 ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) **Now also in CRAN!**
 
 ``` r
-# To install the CRAN version (0.2.0):
+# To install the CRAN version (0.2.1):
 install.packages("synoptReg")
 
 # To install the latest version (0.2.1) from Github:
@@ -53,7 +51,7 @@ synoptReg also has two functions to perform the PCA approach to compute the syno
 There are two functions to rasterize the results in order to get a cool visualization of the aftermentioned synoptic classification:
 
 -   `raster_clas` converts the dataframe of the synoptic classification data into a RasterStack format.
--   `raster_cwt2env`  converts the dataframe of the environmental data based on the synoptic classification into a RasterStack object.
+-   `raster_ct2env`  converts the dataframe of the environmental data based on the synoptic classification into a RasterStack object.
 
 Finally, synoptReg provides three functions to convert our data to raster, perform a raster PCA and finally, execute an automatic spatial regionalisation (clustering):
 
@@ -94,10 +92,10 @@ mslp_s_clas <- synoptclas(smode_data = mslp_smode$smode_data, ncomp =  6)
 # But now, it's time to represent our synoptic classification.
 # So we will use raster_clas to obtain the classification in a raster
 # format. 
-raster_cwt <- raster_clas(mslp$lon, mslp$lat, mslp_s_clas$grouped_data)
+raster_ct <- raster_clas(mslp$lon, mslp$lat, mslp_s_clas$grouped_data)
 
 # This raster stack can be plotted by ggplot, rasterVis or sp. In this case,
-# the CWT 3 is displayed:
+# the CT 3 is displayed:
 
 library(sp)
 library(maptools)
@@ -107,14 +105,14 @@ require(raster)
 limit <- readShapeSpatial("TM_WORLD_BORDERS_SIMPL-0.3.shp")
 
 # selecting CWT3
-cwt3 <- raster_cwt$CWT3
+ct3 <- raster_ct$CT3
 
 # plotting CWT 3
-spplot(cwt3,
+spplot(ct3,
        sp.layout = list(limit, first = FALSE),
-       names.attr=names(cwt3),
-       at = seq(round(min(minValue(cwt3))-1),round(max(maxValue(cwt3))+4), 2),
-       zlim = c(min(minValue(cwt3)),round(max(maxValue(cwt3)))),
+       names.attr=names(ct3),
+       at = seq(round(min(minValue(ct3))-1),round(max(maxValue(ct3))+4), 2),
+       zlim = c(min(minValue(ct3)),round(max(maxValue(ct3)))),
        col.regions=colorRamps::matlab.like2(100),
        par.settings = list(strip.background=list(col="white"), fontsize = list(text = 7)),
        contour=TRUE,
@@ -132,7 +130,7 @@ As you see, the synoptic classification is displayed!
 
 ```r
 # Now we would like to know how the precipitation is spatialy 
-# distributed over the Balearic Islands (Spain) when the CWT 3
+# distributed over the Balearic Islands (Spain) when the CT 3
 # occurs. To do it, we need to read our precp_grid data and 
 # reformat with tidy_cuttime_nc.
 data(precp_grid) 
@@ -142,10 +140,10 @@ precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid, only_convert = TRUE)
 ```r
 # Now, we use the function raster_cwt2env to get the precipitation raster
 # based on CWT 3:
-raster_env <- raster_cwt2env(precp_grid$lon, precp_grid$lat, mslp_s_clas$clas, 
+raster_env <- raster_ct2env(precp_grid$lon, precp_grid$lat, mslp_s_clas$clas, 
                             grid_data = precp_grid_s$smode_data, option = 2)
 # And then, we can plot this raster:
-raster_env3 <- raster_env$CWT3
+raster_env3 <- raster_env$CT3
 
 spplot(raster_env3/10,
        sp.layout = list(limit, first = FALSE),
