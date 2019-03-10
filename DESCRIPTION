@@ -5,8 +5,7 @@ Version: 0.2.1
 Depends: R (>= 2.10)
 Author: Marc Lemus-Canovas
 Maintainer: Marc Lemus-Canovas <mlemus@ub.edu>
-Description: Computes a synoptic climate classification through daily reanalysis data and
-    creates a climate or environmental regionalization.
+Description: Computes a synoptic climate classification through daily reanalysis data and creates a climate or environmental regionalization.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
