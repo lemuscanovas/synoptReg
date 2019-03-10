@@ -10,6 +10,6 @@ Description: Computes a synoptic climate classification through daily reanalysis
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports: ncdf4, zoo, fields, raster, maps
+Imports: ncdf4, zoo, fields, raster, maps, RNCEP
 NeedsCompilation: no
 RoxygenNote: 6.1.0
