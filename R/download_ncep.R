@@ -48,8 +48,8 @@ download_ncep <- function(var="air.2m",level="gaussian",
     lat <- as.numeric(dimnames(data_mat)[[1]])
     lon <- as.numeric(dimnames(data_mat)[[2]])
     #expand lonlat for each point
-    lonlat <- expand.grid(lon,lat)
-    names(lonlat) <- c("lat","lon")
+    # lonlat <- expand.grid(lon,lat)
+    # names(lonlat) <- c("lat","lon")
 
     #extract date-time
     time <- dimnames(data_mat)[[3]]
@@ -57,7 +57,8 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
     dimnames(data_mat) <- NULL
 
-    ncep_list <- list(mat=data_mat,time=time,coord=lonlat)
+    ncep_list <- list(datavar=data_mat, lon=lon, lat=lat, dates=time)
+
     return(ncep_list)
 
 
@@ -90,8 +91,8 @@ download_ncep <- function(var="air.2m",level="gaussian",
   lat <- as.numeric(dimnames(data_mat)[[1]])
   lon <- as.numeric(dimnames(data_mat)[[2]])
   #expand lonlat for each point
-  lonlat <- expand.grid(lon,lat)
-  names(lonlat) <- c("lat","lon")
+  # lonlat <- expand.grid(lon,lat)
+  # names(lonlat) <- c("lat","lon")
 
   #extract date-time
   time <- dimnames(data_mat)[[3]]
@@ -99,13 +100,15 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   dimnames(data_mat) <- NULL
 
-  ncep_list <- list(mat=data_mat,time=time,coord=lonlat)
+  ncep_list <- list(datavar=data_mat, lon=lon, lat=lat, dates=time)
 
   #in case you want to save the downloaded matrix
-  if(save_download==TRUE) save(ncep_list,file=paste(var,"_grid.RData",sep=""))
+  if(save_download==TRUE){
+    save(ncep_list,file=paste(var,"_grid.RData",sep=""))
+  }else{
+    ncep_list <- ncep_list
+    }
 
   return(ncep_list)
 
 }
-
-

@@ -5,6 +5,7 @@
 #' @param longitude Numeric vector containing longitudes
 #' @param latitude Numeric vector containing latitudes
 #' @param grouped_data Data frame. S-mode data frame containing an integer column with the circulation types. i.e. output obtained from \code{synoptclas} function.
+#' @param option Integer (1 or 2), to manage latitude and longitude data when convert to raster. Try 2 if 1 is wrong and viceversa. Default is 1.
 #'
 #' @return a Raster Stack containing the circulation types.
 #'
@@ -22,10 +23,8 @@
 #' @export
 
 
-raster_clas <- function(longitude, latitude, grouped_data) {
-
+raster_clas <- function (longitude, latitude, grouped_data, option = 1) {
   mean_ct <- list()
-
   for (ii in 1:length(unique(grouped_data$CT))) {
     CT <- subset(grouped_data, CT == ii)
     CT <- CT[, -c(1:2)]
@@ -37,17 +36,35 @@ raster_clas <- function(longitude, latitude, grouped_data) {
   df_all_ct <- do.call(cbind.data.frame, mean_ct)
   colnames(df_all_ct) <- 1:length(unique(grouped_data$CT))
 
-  # lonlat generation
-  lonlat <- expand.grid(lon=longitude,lat=latitude)
+  if(option == 1){
 
-  # stacking raster ct
-  raster_ct <- raster::stack()
+    # lonlat generation
+    lonlat <- expand.grid(lon = longitude, lat = latitude)
 
-  for (zz in 1:ncol(df_all_ct)) {
-    spatial_ct <- raster::rasterFromXYZ(cbind.data.frame(lonlat, df_all_ct[,zz]))
-    raster_ct <- raster::stack(raster_ct, spatial_ct)
+    # stacking raster ct
+    raster_ct <- raster::stack()
+
+    for (zz in 1:ncol(df_all_ct)) {
+      spatial_ct <- raster::rasterFromXYZ(cbind.data.frame(lonlat,
+                                                           df_all_ct[, zz]))
+      raster_ct <- raster::stack(raster_ct, spatial_ct)
+    }
+
+  } else if(option == 2){
+
+    lonlat <- expand.grid(lon = latitude, lat = longitude)
+    raster_ct <- raster::stack()
+
+    for (zz in 1:ncol(df_all_ct)) {
+      spatial_ct <- raster::rasterFromXYZ(cbind.data.frame(lonlat,
+                                                           df_all_ct[, zz]))
+      raster_ct <- raster::stack(raster_ct, spatial_ct)
+    }
+
+    raster_ct <- flip(flip(t(raster_ct),2),1)
+
   }
-  names(raster_ct) <- paste0("CT", 1:ncol(df_all_ct))
 
+  names(raster_ct) <- paste0("CT", 1:ncol(df_all_ct))
   return(raster_ct)
 }
