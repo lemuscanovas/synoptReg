@@ -34,6 +34,11 @@ download_ncep <- function(var="air.2m",level="gaussian",
                            save_download=TRUE,
                            file_name=NULL){
 
+  #argument control
+
+  if (!(hour%in%c(0,6,12,18))) stop("'hour' must be one of the following: 0,6,12,18")
+
+
   #download with NCEP.gather function from RNCEP
   data_mat <-        NCEP.gather(var,level,
                                  month_range,
@@ -44,45 +49,22 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   if(dailymean == TRUE){
     data_mat <- NCEP.aggregate(data_mat, HOURS=FALSE, fxn='mean')
-
-    lat <- as.numeric(dimnames(data_mat)[[1]])
-    lon <- as.numeric(dimnames(data_mat)[[2]])
-    #expand lonlat for each point
-    # lonlat <- expand.grid(lon,lat)
-    # names(lonlat) <- c("lat","lon")
-
-    #extract date-time
-    time <- dimnames(data_mat)[[3]]
-    time <- lubridate::ymd(time)
-
-    dimnames(data_mat) <- NULL
-
-    ncep_list <- list(datavar=data_mat, lon=lon, lat=lat, dates=time)
-
-    return(ncep_list)
-
-
-  } else{
-      data_mat <- data_mat
   }
 
   # Specific hour
-  if(is.null(hour)){
-    data_mat <- data_mat
+ if(!is.null(hour)){
 
-  }else if(!is.null(hour)){
+    if(hour == 0){
+      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(6,12,18),set2na = FALSE )
 
-    if(hour == 00){
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(06,12,18),set2na = FALSE )
-
-    }else if(hour == 06) {
-     data_mat <-        NCEP.restrict(data_mat,hours2remove = c(00,12,18), set2na = FALSE)
+    }else if(hour == 6) {
+     data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,12,18), set2na = FALSE)
 
     }else if(hour == 12) {
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(00,06,18),set2na = FALSE )
+      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,6,18),set2na = FALSE )
 
     }else if(hour == 18) {
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(00,06,12),set2na = FALSE )
+      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,06,12),set2na = FALSE )
     }
   }
 
@@ -105,9 +87,7 @@ download_ncep <- function(var="air.2m",level="gaussian",
   #in case you want to save the downloaded matrix
   if(save_download==TRUE){
     save(ncep_list,file=paste(var,"_grid.RData",sep=""))
-  }else{
-    ncep_list <- ncep_list
-    }
+  }
 
   return(ncep_list)
 
