@@ -10,9 +10,12 @@
 #' @param hour One or several hours of the following: 0,6,12 or 18 c(0,6) or 1
 #'
 #' @example
-#' #Air temperature 2m for 2017
+#' #Daily mean air temperature 2m for 2017
 #' ta_data <- download_ncep(year_range=2017)
 #'
+#' #Air temperature 2m at 06:00 for 2017
+#' ta_data_h6 <- download_ncep(year_range=2017,dailymean = TRUE,hour=6)
+
 #'
 #' @return a list with: itemize{
 #'    \item{a matrix with the reanalysis data}
@@ -22,13 +25,12 @@
 #'
 #' @export
 
-
 download_ncep <- function(var="air.2m",level="gaussian",
                            month_range=c(1,12),
                            year_range=c(2010,2017),
                            lat_range=c(30,60),
                            lon_range=c(-30,10),
-                           dailymean=FALSE,
+                           dailymean=TRUE,
                            hour = NULL,
                            reanalysis2=TRUE,
                            save_download=TRUE,
@@ -36,7 +38,7 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   #argument control
 
-  if (!(hour%in%c(0,6,12,18))) stop("'hour' must be one of the following: 0,6,12,18")
+  if(!(hour%in%c(0,6,12,18))) stop("'hour' must be one of the following: 0,6,12,18")
 
 
   #download with NCEP.gather function from RNCEP
@@ -49,7 +51,7 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   if(dailymean == TRUE){
     data_mat <- NCEP.aggregate(data_mat, HOURS=FALSE, fxn='mean')
-  }
+  }else{
 
   # Specific hour
  if(!is.null(hour)){
@@ -68,7 +70,7 @@ download_ncep <- function(var="air.2m",level="gaussian",
     }
   }
 
-
+}
   #extract lonlat
   lat <- as.numeric(dimnames(data_mat)[[1]])
   lon <- as.numeric(dimnames(data_mat)[[2]])
