@@ -3,18 +3,19 @@
 #' Weather Data from NCEP/NCAR Reanalysis via RNCEP package
 #'
 #' @import RNCEP
+#' @import lubridate
 #'
 #' @param var slp 'sea level pressure' (default) for more variables see help of ?NCEP.gather
 #' @param level surface (default)
 #' @param month_range min,max month c(1,12) (default)
-#' @param hour One or several hours of the following: 0,6,12 or 18 c(0,6) or 1
+#' @param hour One hour of the following: 0,6,12 or 18
 #'
 #' @example
 #' #Daily mean air temperature 2m for 2017
 #' ta_data <- download_ncep(year_range=2017)
 #'
 #' #Air temperature 2m at 06:00 for 2017
-#' ta_data_h6 <- download_ncep(year_range=2017,dailymean = TRUE,hour=6)
+#' ta_data_h6 <- download_ncep(year_range=2017,dailymean = FALSE,hour=6)
 
 #'
 #' @return a list with: itemize{
@@ -35,10 +36,6 @@ download_ncep <- function(var="air.2m",level="gaussian",
                            reanalysis2=TRUE,
                            save_download=TRUE,
                            file_name=NULL){
-
-  #argument control
-
-  if(!(hour%in%c(0,6,12,18))) stop("'hour' must be one of the following: 0,6,12,18")
 
 
   #download with NCEP.gather function from RNCEP
@@ -80,7 +77,16 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   #extract date-time
   time <- dimnames(data_mat)[[3]]
-  time <- lubridate::ymd_h(time)
+
+  if(dailymean == TRUE){
+
+    time <- ymd(time)
+
+  }else{
+
+  time <- ymd_h(time)
+
+  }
 
   dimnames(data_mat) <- NULL
 
