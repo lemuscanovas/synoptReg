@@ -1,7 +1,7 @@
 Package: synoptReg
 Type: Package
 Title: Synoptic Climate Classification and Spatial Regionalization of Environmental Data
-Version: 0.2.1
+Version: 0.3.0
 Depends: R (>= 2.10)
 Author: Marc Lemus-Canovas
 Maintainer: Marc Lemus-Canovas <mlemus@ub.edu>
@@ -9,6 +9,6 @@ Description: Computes a synoptic climate classification through daily reanalysis
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports: ncdf4, zoo, fields, raster, maps, RNCEP
+Imports: ncdf4, zoo, raster, RNCEP, lubridate
 NeedsCompilation: no
 RoxygenNote: 6.1.0

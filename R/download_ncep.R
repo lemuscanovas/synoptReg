@@ -39,7 +39,7 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
 
   #download with NCEP.gather function from RNCEP
-  data_mat <-        NCEP.gather(var,level,
+  data_mat <-        RNCEP::NCEP.gather(var,level,
                                  month_range,
                                  year_range,
                                  lat_range,
@@ -47,23 +47,23 @@ download_ncep <- function(var="air.2m",level="gaussian",
                          reanalysis2 = reanalysis2)
 
   if(dailymean == TRUE){
-    data_mat <- NCEP.aggregate(data_mat, HOURS=FALSE, fxn='mean')
+    data_mat <-  RNCEP::NCEP.aggregate(data_mat, HOURS=FALSE, fxn='mean')
   }else{
 
   # Specific hour
  if(!is.null(hour)){
 
     if(hour == 0){
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(6,12,18),set2na = FALSE )
+      data_mat <-         RNCEP::NCEP.restrict(data_mat,hours2remove = c(6,12,18),set2na = FALSE )
 
     }else if(hour == 6) {
-     data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,12,18), set2na = FALSE)
+     data_mat <-         RNCEP::NCEP.restrict(data_mat,hours2remove = c(0,12,18), set2na = FALSE)
 
     }else if(hour == 12) {
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,6,18),set2na = FALSE )
+      data_mat <-         RNCEP::NCEP.restrict(data_mat,hours2remove = c(0,6,18),set2na = FALSE )
 
     }else if(hour == 18) {
-      data_mat <-        NCEP.restrict(data_mat,hours2remove = c(0,06,12),set2na = FALSE )
+      data_mat <-         RNCEP::NCEP.restrict(data_mat,hours2remove = c(0,06,12),set2na = FALSE )
     }
   }
 
