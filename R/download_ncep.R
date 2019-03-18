@@ -80,11 +80,11 @@ download_ncep <- function(var="air.2m",level="gaussian",
 
   if(dailymean == TRUE){
 
-    time <- ymd(time)
+    time <- lubridate::ymd(time)
 
   }else{
 
-  time <- ymd_h(time)
+  time <- lubridate::ymd_h(time)
 
   }
 
