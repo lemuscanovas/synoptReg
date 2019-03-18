@@ -24,7 +24,7 @@ News!
 
 *new releases of version 0.3.0:*
 - A new function called `download_ncep` was developed in order two download reanalysis data form NCEP/NCAR.
-- We have added the argument `option` to `raster_clas` function in the same way as in the `raster_ct2env`
+- We have added the argument `option` to `raster_clas` function in the same way as in the `raster_ct2env`.
 
 Installation
 ------------
