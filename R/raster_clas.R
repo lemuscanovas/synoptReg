@@ -28,7 +28,7 @@ raster_clas <- function (longitude, latitude, grouped_data, option = 1) {
   for (ii in 1:length(unique(grouped_data$CT))) {
     CT <- subset(grouped_data, CT == ii)
     CT <- CT[, -c(1:2)]
-    CT <- colMeans(CT)/100
+    CT <- colMeans(CT)
     mean_ct[[ii]] <- CT
   }
 
@@ -61,7 +61,7 @@ raster_clas <- function (longitude, latitude, grouped_data, option = 1) {
       raster_ct <- raster::stack(raster_ct, spatial_ct)
     }
 
-    raster_ct <- flip(flip(t(raster_ct),2),1)
+    raster_ct <- raster::flip(raster::flip(t(raster_ct),2),1)
 
   }
 
