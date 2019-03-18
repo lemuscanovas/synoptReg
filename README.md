@@ -15,10 +15,15 @@ Overview
 
 News!
 ------------
-**Version 0.2.1 was updated to CRAN!** 
+**Version 0.2.2 was updated to CRAN!** 
 
-*new releases of version 0.2.1:*
-- The function `raster_cwt2env` has been renamed to `raster_ct2env`. The output objects related to de circulation types are called "CT" instead of "CWT".
+*new releases of version 0.2.2:*
+- the `tidy_cuttime_nc` function has been rewritten. The `only_convert` argument has been removed, and the `initial_year` and `end_year` arguments have been replaced by `year_range`.
+
+**Version 0.3.0 updated to GitHub:**
+*new releases of version 0.3.0:*
+- A new function called `download_ncep` was developed in order two download reanalysis data form NCEP/NCAR.
+- We have added the argument `option` to `raster_clas` function in the same way as in the `raster_ct2env`
 
 Installation
 ------------
