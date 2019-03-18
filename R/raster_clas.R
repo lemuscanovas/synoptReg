@@ -61,7 +61,7 @@ raster_clas <- function (longitude, latitude, grouped_data, option = 1) {
       raster_ct <- raster::stack(raster_ct, spatial_ct)
     }
 
-    raster_ct <- raster::flip(raster::flip(t(raster_ct),2),1)
+    raster_ct <- raster::flip(raster::flip(raster::t(raster_ct),2),1)
 
   }
 
