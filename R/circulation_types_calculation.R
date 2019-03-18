@@ -56,7 +56,14 @@ classjen <- function(points,month_range=c(1,12),year_range=c(2010,2017),
                      load_data=FALSE,file_name=NULL,...){
 
   #download sea level pressure
-  pp <- press_download_ncep(points,...)
+  pp <- press_download_ncep(points=points,
+                            month_range=month_range,year_range=year_range,
+                            lat_range=lat_range,lon_range=lon_range,
+                            press_dailymean=press_dailymean,hour=hour,
+                            reanalysis2=reanalysis2,
+                            load_data=load_data,
+                            save_download=save_download,
+                            file_name,file_name)
 
   #calculation of flows
   var <- classjen_flows(pp)
@@ -64,7 +71,7 @@ classjen <- function(points,month_range=c(1,12),year_range=c(2010,2017),
   #calculation of weather types
   ct <- apply(var,1,classify_jc)
 
-  if(!is.null(hour)){
+  if(is.null(hour)){
 
   wt <- data.frame(date=pp$date,ct=ct)
 
@@ -83,11 +90,14 @@ classjen <- function(points,month_range=c(1,12),year_range=c(2010,2017),
 
 #sea level pressure download
 
-press_download_ncep <- function(points,month_range=c(1,12),year_range=c(2010,2017),
-                                lat_range=c(30,60),lon_range=c(-30,10),
-                                press_dailymean=TRUE,hour=NULL,
-                                reanalysis2=TRUE,save_download=TRUE,
-                                load_data=FALSE,file_name=NULL,...){
+press_download_ncep <- function(points,
+                                month_range,year_range,
+                                lat_range,lon_range,
+                                press_dailymean,hour,
+                                reanalysis2,
+                                load_data,
+                                save_download,
+                                ...){
 
   if(load_data==FALSE){
 
@@ -97,7 +107,7 @@ press_download_ncep <- function(points,month_range=c(1,12),year_range=c(2010,201
                          month_range,year_range,
                          lat_range,lon_range,
                          reanalysis2 = reanalysis2,
-                        return.units=FALSE)
+                         return.units=FALSE)
     mat <- mat/100
 
     if(save_download==TRUE) save(mat,file="press_matrix.RData")
