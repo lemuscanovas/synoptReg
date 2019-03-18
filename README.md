@@ -21,6 +21,7 @@ News!
 - the `tidy_cuttime_nc` function has been rewritten. The `only_convert` argument has been removed, and the `initial_year` and `end_year` arguments have been replaced by `year_range`.
 
 **Version 0.3.0 updated to GitHub:**
+
 *new releases of version 0.3.0:*
 - A new function called `download_ncep` was developed in order two download reanalysis data form NCEP/NCAR.
 - We have added the argument `option` to `raster_clas` function in the same way as in the `raster_ct2env`
