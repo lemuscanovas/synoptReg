@@ -77,7 +77,7 @@ library(synoptReg)
 data(mslp) #mean sea level pressure data (ERA-20C)
 
 # Now we need to convert our mslp data into S-mode data frame:
-mslp_smode <- tidy_cuttime_nc(datalist = mslp, only_convert = TRUE)
+mslp_smode <- tidy_cuttime_nc(datalist = mslp)
 
 # Before to apply the synoptic classification we need some information
 # about the number of PCA to select in the procedure. For this reason,
@@ -140,7 +140,7 @@ As you see, the synoptic classification is displayed!
 # occurs. To do it, we need to read our precp_grid data and 
 # reformat with tidy_cuttime_nc.
 data(precp_grid) 
-precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid, only_convert = TRUE)
+precp_grid_s <- tidy_cuttime_nc(datalist = precp_grid)
 ```
 **Important**: Note that mslp data and precp_grid data must share the same time series (2000-01-01 to 2009-12-31). It is very important!
 ```r
