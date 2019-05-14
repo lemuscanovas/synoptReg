@@ -15,6 +15,10 @@ Overview
 
 News!
 ------------
+**Paper published!**
+If you use the synoptReg package, please cite: 
+***Lemus-Canovas, M., Lopez-Bustins, J.A., Martin-Vide, J., Royé, D., 2019. synoptReg: An R package for computing a synoptic climate classification and a spatial regionalization of environmental data. Environmental Modelling & Software, Vol. 118,114-119pp, ISSN 1364-8152, https://doi.org/10.1016/j.envsoft.2019.04.006.***
+
 **Version 0.2.2 was updated to CRAN!** 
 
 *new releases of version 0.2.2:*
