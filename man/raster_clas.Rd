@@ -4,7 +4,7 @@
 \alias{raster_clas}
 \title{Raster conversion of the Synoptic Classification}
 \usage{
-raster_clas(longitude, latitude, grouped_data)
+raster_clas(longitude, latitude, grouped_data, option = 1)
 }
 \arguments{
 \item{longitude}{Numeric vector containing longitudes}
@@ -12,6 +12,8 @@ raster_clas(longitude, latitude, grouped_data)
 \item{latitude}{Numeric vector containing latitudes}
 
 \item{grouped_data}{Data frame. S-mode data frame containing an integer column with the circulation types. i.e. output obtained from \code{synoptclas} function.}
+
+\item{option}{Integer (1 or 2), to manage latitude and longitude data when convert to raster. Try 2 if 1 is wrong and viceversa. Default is 1.}
 }
 \value{
 a Raster Stack containing the circulation types.
