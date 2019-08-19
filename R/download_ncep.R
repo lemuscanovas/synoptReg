@@ -1,4 +1,4 @@
-#' Download NCEP
+#' Download NCEP/NCAR data
 #'
 #' Weather Data from NCEP/NCAR Reanalysis via RNCEP package
 #'
