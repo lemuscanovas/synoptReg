@@ -8,6 +8,8 @@ synoptReg<img src="img/logo.png" align="right"  height="160" />
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
+
+# NEW WEBSITE: https://lemuscanovas.github.io/synoptreg/
 Overview
 --------
 
