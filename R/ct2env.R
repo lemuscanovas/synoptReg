@@ -48,9 +48,9 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     } else if (out == "raster") {
 
         x <- x %>%
-            spread(.data$WT, .data$calc, drop = F) %>%
+            spread(.data$WT, .data$calc, drop = T) %>%
             distinct(.data$lon, .data$lat, .keep_all = T) %>%
-            filter(!is.na(.data$.[[3]])) %>%
+            filter_at(3, all_vars(!is.na(.data$.))) %>%
             raster::rasterFromXYZ()
         return(x)
     }
