@@ -4,51 +4,75 @@
 \alias{synoptclas}
 \title{Synoptic classification}
 \usage{
-synoptclas(smode_data, ncomp, extreme_scores = 2)
+synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode",
+  extreme_scores = 2)
 }
 \arguments{
-\item{smode_data}{Data frame. S-mode data frame of the reanalysis variable. I.e. output obtained from \code{tidy_cuttime_nc} function.}
+\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}
 
 \item{ncomp}{Integer. Number of components to be retained.}
 
-\item{extreme_scores}{Integer. Definition of extreme score threshold (Esteban et al., 2005). Default is 2.}
+\item{norm}{logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classify two ore more variables.}
+
+\item{matrix_mode}{character. The mode of matrix to use. Choose between S-mode and T-mode}
+
+\item{extreme_scores}{Integer. Definition of extreme score threshold (Esteban et al., 2005). Default is 2. Only applicable for a \code{matrix_mode = "S-mode"}}
 }
 \value{
 A list with: \itemize{
-   \item{A data frame containing data grouped by circulation types ("grouped_data").}
-   \item{An integer with the circulation types ("clas").}
-   \item{A data frame containing the number and percentage of days assigned to each circulation type ("ct_freq").}
-   \item{A data frame containing the number of days assigned to each circulation type by month ("monthly_freq").}
-   \item{A data frame containing the number of days assigned to each circulation type by year ("annual_freq").}
-   \item{The 'rotated' loadings matrix of class \code{"loadings"} ("rotated_loadings").}
-   \item{The scores of the supplied data on the principal components ("scores").}
-   \item{The coordinates of the scores used to perform the k-means clustering. For more information, read Esteban et al. (2005)("scores_coordinates").}
+   \item{A data.frame containing the dates and the weather types. If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification).}
+   \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification) .}
 }
 }
 \description{
-\code{synoptclas} establish a synoptic classification based on any atmospheric variable (i.e. mean sea level pressure, geoptential height at 500 hPa, etc.)
+\code{synoptclas} allows to perform several types of synoptic classification approaches based on one or several atmospheric variables (i.e. mean sea level pressure, geoptential height at 500 hPa, etc.)
 }
 \details{
-A PCA is applied to a S-mode matrix to reduce the dimension of the variables, in which the grid points are the variables and the days are the observations.
-These principal components are subsequently rotated by means of a varimax rotation. With the rotated components, the scores are used to apply the extreme
-scores method (Esteban et al., 2005). The scores show the degree of representativeness associated with the variation modes of each principal component, i.e.,
-the classification of each day to its more representative centroid. Thus, the extreme scores method uses the scores > 2 and < -2, establishing a positive and
-negative phase for each principal component. The extreme scores procedure establishes the number of groups and their centroids in order to apply the K-means
-method without iterations.
+The \code{matrix_mode} argument allows to conduct different types of synoptic classifications depending on the user's objective.
+If the user wants to perform a synoptic classification of a long and continuous series, he must set the \code{matrix_mode = "S-mode}.
+When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
+so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
+which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
+weather types (WT) clasification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
+to an specific WT based on the multivariate coordinates provided by the "scores". Before using a clustering method, a VARIMAX rotation is performed on the principal Components
+retined, with the aim of redistributing the variance of such components.
+With the rotated components, the scores are used to apply the extreme scores method (Esteban et al., 2005). The scores show the degree of representativeness associated
+with the variation modes of each principal component, i.e., the classification of each day to its more representative centroid. Thus, the extreme scores method uses
+the scores > 2 and < -2, establishing a positive and negative phase for each principal component. The extreme scores procedure establishes the number of groups and their
+centroids in order to apply the K-means method without iterations.
+
+Conversely, if the user wants to perform a synoptic classification of specific events (i.e. flood events, extreme temperatures events,etc.), he must set the \code{matrix_mode = "T-mode}.
+In this case, the variables are the days (time series) and the observations are the grid points. The relationships established in this case are between each daily gridded map.
+For this reason, the eigenvalues (correlations) allow to allow us to associate each day to a WT without using a clustering method as in the case of the S-mode matrix.
 }
 \examples{
-# Load data (mslp)
+# Load data (mslp or precp_grid)
 data(mslp)
-# Converting our data into a S-mode, but without modifying time period
-smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
-# classification performance
-smode_clas <- synoptclas(smode_mslp$smode_data, ncomp = 6)
+data(z500)
+# Tidying our atmospheric variables (500 hPa geopotential height
+# and mean sea level pressure) together.
+
+# Time subset between two dates
+atm_data1 <- tidy_nc(x = list(mslp,z500),
+             name_vars = c("mslp","z500"))
+
+# S-mode classification
+smode_clas <- synoptclas(atm_data1, ncomp = 6)
+
+# Time subset using a vector of dates of interest
+dates_int <- c("2000-01-25","2000-04-01","2000-07-14","2001-05-08","2002-12-20")
+atm_data2 <- tidy_nc(x = list(mslp,z500),
+                     time_subset = dates_int,
+                     name_vars = c("mslp","z500"))
+
+# S-mode classification
+tmode_clas <- synoptclas(atm_data2, ncomp = 2, matrix_mode = "T-mode")
 
 
 }
 \references{
 {
-Esteban, P. , Jones, P. D., MartC-nb
+Esteban, P. , Jones, P. D., Martin.Vide, J.
 \emph{Atmospheric circulation patterns related to heavy snowfall days in Andorra, Pyrenees}
 Int. J. Climatol. 25: 319-329. doi:10.1002/joc.1103
 }

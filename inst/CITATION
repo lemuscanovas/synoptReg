@@ -1,0 +1,17 @@
+citHeader("To cite package synoptReg in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title = "synoptReg: An R package for computing a synoptic climate classification and a spatial regionalization of environmental data",
+  journal  = "Environmental Modelling & Software",
+  volume   = "118",
+  pages    = "114 - 119",
+  year     = "2019",
+  issn     = "1364-8152",
+  doi      = "https://doi.org/10.1016/j.envsoft.2019.04.006",
+  url      = "http://www.sciencedirect.com/science/article/pii/S1364815219300064",
+  author   = "Marc Lemus-Canovas and Joan A. Lopez-Bustins and Javier Martin-Vide and Dominic Royé",
+  textVersion =
+	paste("Lemus-Canovas, M., Lopez-Bustins, J.A., Martin-Vide, J., Roye., D., 2019. synoptReg: An R package for computing a synoptic climate classification and a spatial regionalization of environmental data.",
+	"Environmental Modelling & Software, 118: 114-119.")
+)

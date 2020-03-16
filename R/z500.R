@@ -1,0 +1,26 @@
+#' 500 hPa Geopotential Height
+#'
+#' Data from the NCEP/NCAR Reanalysis 1
+#' (\url{https://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis.html}).
+#' This data corresponds to global daily values of 500 hPa geopotential height with 2.5 x 2.5?? of spatial resolution from January 2000 to december 2002.
+#'
+#' @docType data
+#'
+#' @usage data(z500)
+#'
+#' @format A data.frame with the following variables: \code{lon,lat,time,value}.
+#' \describe{
+#'   \item{geographical area:}{-10,30,30,60}
+#'   \item{time period:}{2000-01-01 to 2002-12-31}
+#'   \item{units:}{meters}
+#' }
+#' @keywords datasets
+#'
+#' @references Poli et al. (2016)
+#' \emph{Kalnay et al.,
+#'                    The NCEP/NCAR 40-year reanalysis project,
+#'                    Bull. Amer. Meteor. Soc., 77, 437-470, 1996}
+#'
+#' @examples
+#' data(z500)
+"z500"

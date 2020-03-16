@@ -4,8 +4,8 @@
 \alias{download_ncep}
 \title{Download NCEP/NCAR data}
 \usage{
-download_ncep(var = "air.2m", level = "gaussian", month_range = c(1,
-  12), year_range = c(2010, 2017), lat_range = c(30, 60),
+download_ncep(var = "slp", level = "surface", month_range = c(1, 12),
+  year_range = c(2010, 2017), lat_range = c(30, 60),
   lon_range = c(-30, 10), dailymean = TRUE, hour = NULL,
   reanalysis2 = TRUE, save_download = TRUE, file_name = NULL)
 }
@@ -16,15 +16,33 @@ download_ncep(var = "air.2m", level = "gaussian", month_range = c(1,
 
 \item{month_range}{min,max month c(1,12) (default)}
 
-\item{hour}{One hour of the following: 0,6,12 or 18}
+\item{year_range}{min,max year c(2010,2017) (default)}
+
+\item{lat_range}{min,max latitude c(30, 60) (default)}
+
+\item{lon_range}{min,max longitud c(-30, 10) (default)}
+
+\item{dailymean}{daily avarage of the variable retrived. Default TRUE.}
+
+\item{hour}{One hour of the following: 0,6,12 or 18.}
+
+\item{reanalysis2}{Logical. Default TRUE. variables are downloaded from the NCEP-DOE Reanalysis 2. If FALSE, data downloaded from NCEP/NCAR Reanalysis 1}
+
+\item{save_download}{Logical. Default TRUE. Do yoy want to save the downloaded data into an RData file?}
+
+\item{file_name}{character. Provide a name for the file downloaded.}
 }
 \value{
-a list with: itemize{
-   \item{a matrix with the reanalysis data}
-   \item{a date-time object}
-   \item{a data.frame with longitude and latitude for each point}
-}
+a data.frame with the following variables: \code{lon, lat, time, value}
 }
 \description{
 Weather Data from NCEP/NCAR Reanalysis via RNCEP package
+}
+\examples{
+#Daily mean air temperature 2m for 2017
+ta_data <- download_ncep(year_range=2017)
+
+#Air temperature 2m at 06:00 for 2017
+ta_data_h6 <- download_ncep(year_range=2017,dailymean = FALSE,hour=6)
+
 }

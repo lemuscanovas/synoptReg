@@ -24,8 +24,10 @@ regionalization <- function(raststack, centers, iter.max = 100, nstart = 100) {
     rNA <- raster::setValues(raster::raster(rasters), 0)
 
     # K-means computation
-    km <- suppressWarnings(kmeans(na.omit(valuetable), centers = centers,
-                                  iter.max = iter.max, nstart = nstart))
+    km <- suppressWarnings(kmeans(na.omit(valuetable),
+                                  centers = centers,
+                                  iter.max = iter.max,
+                                  nstart = nstart))
 
     for (i in 1:raster::nlayers(rasters)) {
         rNA[is.na(rasters[[i]])] <- 1
@@ -48,12 +50,15 @@ regionalization <- function(raststack, centers, iter.max = 100, nstart = 100) {
     }
 
     # Pseudo-MAE raster
-    errormap <- raster::stack(errormap, abs(classes_rm - raster::mean(rasters))
-                              /raster::ncell(rasters))
+    errormap <- raster::stack(errormap,
+                              abs(classes_rm - raster::mean(rasters)) /
+                                  raster::ncell(rasters))
 
     # Pseudo-MAE mean value
-    mae_mean <- errormap.mean <- raster::cellStats(errormap, "mean")
+    mae_mean <- raster::cellStats(errormap, "mean")
 
-    return(list(regionalization = classes, kmeans = km, errormap = errormap,
+    return(list(regionalization = classes,
+                kmeans = km,
+                errormap = errormap,
                 pseudoMAE = mae_mean))
 }

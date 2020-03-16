@@ -4,32 +4,45 @@
 \alias{pca_decision}
 \title{PCA decision}
 \usage{
-pca_decision(smode_data)
+pca_decision(x, ncomp = 30, norm = T, matrix_mode = "S-mode")
 }
 \arguments{
-\item{smode_data}{S-mode dataframe of the reanalysis variable. I.e. output obtained from \code{tidy_cuttime_nc} function.}
+\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}
+
+\item{ncomp}{integer. Number of principal components to show/retain}
+
+\item{norm}{logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classify two ore more variables.}
+
+\item{matrix_mode}{character. The mode of matrix to use. Choose between S-mode and T-mode}
 }
 \value{
 a list with: \itemize{
    \item{A list with class \code{princomp} containing all the results of the PCA }
-   \item{A data frame containing the main results of the 30 first PCA (standard deviation, proportion of variance and cumulative variance).}
+   \item{A data frame containing the main results of the \code{ncomp} selected (standard deviation, proportion of variance and cumulative variance).}
+   \item{A \code{ggplot2} object to visualize the scree test}
 }
 }
 \description{
 \code{pca_decision} plots the explained variances against the number of the principal component. In addition, it returns all the information about the PCA performance.
 }
 \note{
-S-mode PCA require more rows than columns to work. In addition, input data cannot contain NAs.
+To perform the PCA the \code{x} must contain more rows than columns. In addition, \code{x} cannot contain \code{NA} values.
 }
 \examples{
-# Load data (mslp)
+# Load data (mslp or precp_grid)
 data(mslp)
-# Converting our data into a S-mode, but without modifying time period
-smode_mslp <- tidy_cuttime_nc(mslp, only_convert = TRUE)
-# PCA decision performance
-info_pca <- pca_decision(smode_mslp$smode_data)
+data(z500)
+# Tidying our atmospheric variables (500 hPa geopotential height
+# and mean sea level pressure) together.
+
+# Time subset between two dates
+atm_data1 <- tidy_nc(x = list(mslp,z500))
+
+# Deciding on the number of PC to retain
+info <- pca_decision(atm_data1)
+
 
 }
 \seealso{
-\code{\link{tidy_cuttime_nc}}
+\code{\link{tidy_nc}}
 }
