@@ -16,11 +16,13 @@
 #' @param file_name character. Provide a name for the file downloaded.
 #'
 #' @examples
+#' \dontrun{
 #' #Daily mean air temperature 2m for 2017
-#' ta_data <- download_ncep(year_range=2017)
+#' #ta_data <- download_ncep(year_range=2017)
 #'
 #' #Air temperature 2m at 06:00 for 2017
-#' ta_data_h6 <- download_ncep(year_range=2017,dailymean = FALSE,hour=6)
+#' #ta_data_h6 <- download_ncep(year_range=2017,dailymean = FALSE,hour=6)
+#'}
 #'
 #' @return a data.frame with the following variables: \code{lon, lat, time, value}
 #'

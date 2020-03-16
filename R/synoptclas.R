@@ -10,7 +10,7 @@
 #'
 #' @details
 #' The \code{matrix_mode} argument allows to conduct different types of synoptic classifications depending on the user's objective.
-#' If the user wants to perform a synoptic classification of a long and continuous series, he must set the \code{matrix_mode = "S-mode}.
+#' If the user wants to perform a synoptic classification of a long and continuous series, he must set the \code{matrix_mode = "S-mode"}.
 #' When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
 #' so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
 #' which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
@@ -21,8 +21,7 @@
 #' with the variation modes of each principal component, i.e., the classification of each day to its more representative centroid. Thus, the extreme scores method uses
 #' the scores > 2 and < -2, establishing a positive and negative phase for each principal component. The extreme scores procedure establishes the number of groups and their
 #' centroids in order to apply the K-means method without iterations.
-#'
-#' Conversely, if the user wants to perform a synoptic classification of specific events (i.e. flood events, extreme temperatures events,etc.), he must set the \code{matrix_mode = "T-mode}.
+#' Conversely, if the user wants to perform a synoptic classification of specific events (i.e. flood events, extreme temperatures events,etc.), he must set the \code{matrix_mode = "T-mode"}.
 #' In this case, the variables are the days (time series) and the observations are the grid points. The relationships established in this case are between each daily gridded map.
 #' For this reason, the eigenvalues (correlations) allow to allow us to associate each day to a WT without using a clustering method as in the case of the S-mode matrix.
 #'
