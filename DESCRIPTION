@@ -8,7 +8,7 @@ Authors@R: c(
     comment = c(ORCID = "0000-0002-0925-3827")),
     person("Dominic", "Roye)", , role = c("aut"),
     comment = c(ORCID = "0000-0002-5516-6396")))
-Description: This package easily computes different types of synoptic classification methods and allows to analyse their effect on environmental variables. More information about the methods used: Lemus-Canovas et al. 2019 <10.1016/j.atmosres.2019.01.018> and Martin-Vide et al. 2008 <10.5194/asr-2-99-2008>
+Description: This package easily computes different types of synoptic classification methods and allows to analyse their effect on environmental variables. More information about the methods used in Lemus-Canovas et al. 2019 <10.1016/j.atmosres.2019.01.018> and Martin-Vide et al. 2008 <10.5194/asr-2-99-2008>.
 License: GPL (>= 3)
 Maintainer: Marc Lemus-Canovas <mlemus@ub.edu>
 URL: <https://lemuscanovas.github.io/synoptreg/ >

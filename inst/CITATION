@@ -1,4 +1,4 @@
-﻿citHeader("To cite package synoptReg in publications use:")
+citHeader("To cite package synoptReg in publications use:")
 
 citEntry(
   entry    = "Article",
