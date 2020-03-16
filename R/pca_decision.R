@@ -110,6 +110,7 @@ pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
         ggplot2::geom_point(data = filter(summary_data_plot, .data$metrics == "prop.variance"),
                            ggplot2::aes(x = .data$PC, y = .data$value), color = "red") +
         ggplot2::ylab("Proportion of Explained variance") +
+        ggplot2::xlab("PC")+
         ggplot2::scale_y_continuous(expand = c(0, 0)) +
         ggplot2::theme_bw()
 
