@@ -12,7 +12,7 @@
 #' @param dailymean daily avarage of the variable retrived. Default TRUE.
 #' @param hour One hour of the following: 0,6,12 or 18.
 #' @param reanalysis2 Logical. Default TRUE. variables are downloaded from the NCEP-DOE Reanalysis 2. If FALSE, data downloaded from NCEP/NCAR Reanalysis 1
-#' @param save_download Logical. Default TRUE. Do yoy want to save the downloaded data into an RData file?
+#' @param save_download Logical. Default TRUE. Do yoy want to save the downloaded data into an RDS file?
 #' @param file_name character. Provide a name for the file downloaded.
 #'
 #' @examples
@@ -99,7 +99,7 @@ download_ncep <- function(var = "slp", level = "surface",
 
     # #in case you want to save the downloaded matrix
     if (save_download == TRUE) {
-        save(df, file = paste(var, "_grid.RData", sep = ""))
+        saveRDS(df, file = paste(var, "_grid.RDS", sep = ""))
     }
     return(df)
 

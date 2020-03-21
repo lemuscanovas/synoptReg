@@ -28,7 +28,7 @@ download_ncep(var = "slp", level = "surface", month_range = c(1, 12),
 
 \item{reanalysis2}{Logical. Default TRUE. variables are downloaded from the NCEP-DOE Reanalysis 2. If FALSE, data downloaded from NCEP/NCAR Reanalysis 1}
 
-\item{save_download}{Logical. Default TRUE. Do yoy want to save the downloaded data into an RData file?}
+\item{save_download}{Logical. Default TRUE. Do yoy want to save the downloaded data into an RDS file?}
 
 \item{file_name}{character. Provide a name for the file downloaded.}
 }
