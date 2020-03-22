@@ -184,8 +184,8 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             setNames(paste0("PC", 1:ncomp))
         abs_rotatedLoadings$WT_abs <- names(abs_rotatedLoadings)[max.col(abs_rotatedLoadings,
                                                                          ties.method = "first")]
-        WT_abs <- as.numeric(gsub(substr(abs_rotatedLoadings$WT_abs, 1, 2), "",
-                                  abs_rotatedLoadings$WT_abs))  # convertimos a numerico
+        WT_abs <- suppressWarnings(as.numeric(gsub(substr(abs_rotatedLoadings$WT_abs, 1, 2), "",
+                                  abs_rotatedLoadings$WT_abs)))  # convertimos a numerico
         abs_rotatedLoadings$WT_abs <- WT_abs
 
         ## Negative/postive WT procedure
