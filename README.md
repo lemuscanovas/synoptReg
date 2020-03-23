@@ -11,7 +11,7 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 
 ## Overview
 
-**synoptReg** is an open source package for computing synoptic climate classifications and spatial regionalizations of environmental data.
+**synoptReg** is an open source package for computing synoptic climate classifications and spatial regionalizations of environmental data. Package website: lemuscanovas.github.io/synoptreg/
 
 ----
 
