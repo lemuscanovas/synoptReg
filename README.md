@@ -62,11 +62,9 @@ remotes::install_github("lemuscanovas/synoptReg")
 
 ### Vignettes
 
-Interested in learning how to use `synoptReg`? Take a look at the following vignettes:
+Interested in learning how to use `synoptReg`? Visit the package website and read the articles:
 
-* [Circulation-To-Environment approach](articles/circulation-to-environment)
-* [Environment-To-Circulation approach](articles/environment-to-circulation)
-* [Extracting metrics from the synoptic classification](articles/classification_metrics)
+* [synoptReg website](https://lemuscanovas.github.io/synoptreg/)
 
 
 ## Package citation
