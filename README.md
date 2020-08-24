@@ -52,7 +52,7 @@ In short, `synoptReg` allows to:
 ### Installation
 
 ``` r
-# To install the CRAN version (1.0.1):
+# To install the CRAN version (1.0.2):
 install.packages("synoptReg")
 
 # To install the latest version from Github:
