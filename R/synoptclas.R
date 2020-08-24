@@ -72,7 +72,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         if (norm == T) {
             pca <- x %>%
                 select(-.data$anom_value) %>%
-                group_by(.data$var) %>%
+                group_by(.data$var, .data$lon, .data$lat) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 unite("expanded_grid",
@@ -156,7 +156,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         if (norm == T) {
             pca <- x %>%
                 select(-.data$anom_value) %>%
-                group_by(.data$var) %>%
+                group_by(.data$var, .data$lon, .data$lat) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 spread(.data$time,.data$value) %>%

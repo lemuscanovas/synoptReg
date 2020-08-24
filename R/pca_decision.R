@@ -44,7 +44,7 @@ pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
         if (norm == T) {
             pca <- x %>%
                 select(-.data$anom_value) %>%
-                group_by(.data$var) %>%
+                group_by(.data$var, .data$lon, .data$lat) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 unite("expanded_grid",
@@ -68,7 +68,7 @@ pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
         if (norm == T) {
             pca <- x %>%
                 select(-.data$anom_value) %>%
-                group_by(.data$var) %>%
+                group_by(.data$var, .data$lon, .data$lat) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 spread(.data$time, .data$value) %>%
