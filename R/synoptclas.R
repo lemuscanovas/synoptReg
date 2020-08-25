@@ -85,7 +85,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         } else if (norm == F) {
             pca <- x %>%
                 select(-.data$anom_value) %>%
-                unite("expanded_grid", .data$lon:.data$lat, sep = ",", remove = T) %>%
+                unite("expanded_grid", .data$lon, .data$lat, sep = ",", remove = T) %>%
                 unite("expanded_grid", .data$expanded_grid, .data$var, sep = "_",
                       remove = T) %>%
                 spread(.data$expanded_grid, .data$value) %>%
