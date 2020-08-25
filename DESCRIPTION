@@ -1,7 +1,7 @@
 Package: synoptReg
 Type: Package
 Title: Synoptic Climate Classification and Spatial Regionalization of Environmental Data
-Version: 1.0.1
+Version: 1.0.2
 Depends: R (>= 3.5)
 Authors@R: c(
     person("Marc", "Lemus-Canovas", , "mlemus@ub.edu", role = c("aut", "cre"), 
