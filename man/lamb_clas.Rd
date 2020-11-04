@@ -2,41 +2,33 @@
 % Please edit documentation in R/lamb_clas.R
 \name{lamb_clas}
 \alias{lamb_clas}
-\title{classification_jc}
+\title{Objective Lamb Weather Type Classification}
 \usage{
 lamb_clas(points, slp)
 }
 \arguments{
-\item{mslp}{3-Dimensional multi-array ([loni,lati,time]) with mean sea level pressure in Pa.}
+\item{points}{16 point pair of coordinates obtained from \code{get_lamb_points}.}
 
-\item{grid16}{Data frame obtained in the main function (extended_jc) that contains the 16 grid-points defining the scheme.
-First row is for longitudes, while the second row is for latitudes.}
-
-\item{centralp}{Numeric that refers to the central point for which the JC classification is calculated.}
-
-\item{loni}{Array with longitude values.}
-
-\item{lati}{Array with latitude values.}
-
-\item{times}{Array with the dates used.}
-
-\item{gale}{A logical for deteriming Gale days.}
+\item{slp}{Mean Sea Level pressure gridded data.}
 }
 \value{
-Daily frequencies of Weather Types and airflow indices.
+
 }
 \description{
 Calculates the classification of the main weather types
-             for one central point that is surrounded by 16-points (grid16). Wind-flow characteristics
+             for the 16-points defined in \code{get_lamb_points}. Wind-flow characteristics
              are computed for the daily pressure field according to the rules proposed by the original
-             Jenkinson and Collison classification (see Jones et al. 1993, Jones et al. 2016).
+             Jenkinson and Collison classification (see Jenkin-son and Collison, 1977, Jones et al. 1993, Jones et al. 2016).
 }
 \examples{
-# Load data
 
 }
 \references{
 {
+Jenkinson, A.F., Collison F.P (1977)
+\emph{An initial climatology of gales over the North Sea}
+Synoptic Climatology Branch Memorandum, No. 62.Meteorological Office: Bracknell, England.
+
 Jones, P. D., Hulme M., Briffa K. R. (1993)
 \emph{A comparison of Lamb circulation types with an objective classification scheme}
 Int. J. Climatol. 13: 655–663.
@@ -47,5 +39,5 @@ Int. J. Climatol. 33: 1129–1139.
 }
 }
 \seealso{
-\code{\link{calculate_cwt}}
+\code{\link{get_lamb_points}}
 }

@@ -1,20 +1,21 @@
-#' @title classification_jc
+#' @title Objective Lamb Weather Type Classification
 #'
 #' @description Calculates the classification of the main weather types
-#'              for one central point that is surrounded by 16-points (grid16). Wind-flow characteristics
+#'              for the 16-points defined in \code{get_lamb_points}. Wind-flow characteristics
 #'              are computed for the daily pressure field according to the rules proposed by the original
-#'              Jenkinson and Collison classification (see Jones et al. 1993, Jones et al. 2016).
-#' @param mslp  3-Dimensional multi-array ([loni,lati,time]) with mean sea level pressure in Pa.
-#' @param grid16   Data frame obtained in the main function (extended_jc) that contains the 16 grid-points defining the scheme.
-#'                 First row is for longitudes, while the second row is for latitudes.
-#' @param centralp Numeric that refers to the central point for which the JC classification is calculated.
-#' @param loni   Array with longitude values.
-#' @param lati   Array with latitude values.
-#' @param times  Array with the dates used.
-#' @param gale   A logical for deteriming Gale days.
-#' @return Daily frequencies of Weather Types and airflow indices.
-#'
+#'              Jenkinson and Collison classification (see Jenkin-son and Collison, 1977, Jones et al. 1993, Jones et al. 2016).
+#' @param points  16 point pair of coordinates obtained from \code{get_lamb_points}.
+#' @param slp  Mean Sea Level pressure gridded data.
+#' @return A list with: \itemize{
+#'    \item{A data.frame containing the dates and the weather types.
+#'    \item{A data frame containing the gridded data grouped by circulation types.
+#' }
+#' 
 #' @references {
+#' Jenkinson, A.F., Collison F.P (1977)
+#' \emph{An initial climatology of gales over the North Sea}
+#' Synoptic Climatology Branch Memorandum, No. 62.Meteorological Office: Bracknell, England.
+#' 
 #' Jones, P. D., Hulme M., Briffa K. R. (1993)
 #' \emph{A comparison of Lamb circulation types with an objective classification scheme}
 #' Int. J. Climatol. 13: 655–663.
@@ -23,9 +24,10 @@
 #' \emph{Lamb weather types derived from Reanalysis products}
 #' Int. J. Climatol. 33: 1129–1139.
 #' }
-#' @seealso  \code{\link{calculate_cwt}}
+#' @seealso  \code{\link{get_lamb_points}}
 #' @examples
-#' # Load data
+#'
+#' @importFrom tidyr pivot_wider pivot_longer 
 #'
 #' @export
 
@@ -42,9 +44,9 @@ lamb_clas <- function(points,slp){
   
   # grid clas
   grid_clas <- inner_join(clas, slp, by = "time") %>% 
-    group_by(lon,lat,WT) %>%
-    summarise(value) %>% ungroup() %>%
-    distinct(lon,lat,WT,.keep_all = T)
+    group_by(.data$lon,.data$lat,.data$WT) %>%
+    summarise(.data$value) %>% ungroup() %>%
+    distinct(.data$lon,.data$lat,.data$WT,.keep_all = T)
   
   return(list(clas = clas,
          grid_clas = grid_clas))
@@ -54,8 +56,8 @@ lamb_clas <- function(points,slp){
 vars_lamb <- function(points, slp) {
   
   pp <- inner_join(points, slp, by = c("lon","lat")) %>%
-    select(-c(lat,lon)) %>% 
-    pivot_wider(names_from = label,values_from = value) 
+    select(-c(.data$lat,.data$lon)) %>% 
+    pivot_wider(names_from = .data$label,values_from = .data$value) 
   
   x<- pp
   

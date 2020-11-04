@@ -1,4 +1,4 @@
-#' Synoptic classification
+#' PCA Synoptic classification
 #'
 #' \code{synoptclas} allows to perform several types of synoptic classification approaches based on one or several atmospheric variables (i.e. mean sea level pressure, geoptential height at 500 hPa, etc.)
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/synoptclas.R
 \name{synoptclas}
 \alias{synoptclas}
-\title{Synoptic classification}
+\title{PCA Synoptic classification}
 \usage{
 synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
 }
