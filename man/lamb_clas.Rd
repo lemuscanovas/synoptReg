@@ -4,15 +4,18 @@
 \alias{lamb_clas}
 \title{Objective Lamb Weather Type Classification}
 \usage{
-lamb_clas(points, slp)
+lamb_clas(points, mslp)
 }
 \arguments{
 \item{points}{16 point pair of coordinates obtained from \code{get_lamb_points}.}
 
-\item{slp}{Mean Sea Level pressure gridded data.}
+\item{mslp}{Mean Sea Level pressure gridded data.}
 }
 \value{
-
+A list with: \itemize{
+   \item{A data.frame containing the dates and the weather types.}
+   \item{A data frame containing the gridded data grouped by circulation types.}
+}
 }
 \description{
 Calculates the classification of the main weather types
@@ -21,6 +24,10 @@ Calculates the classification of the main weather types
              Jenkinson and Collison classification (see Jenkin-son and Collison, 1977, Jones et al. 1993, Jones et al. 2016).
 }
 \examples{
+data(mslp)
+
+points <- get_lamb_points(x = 5,y = 40)
+lamb_clas(points = points, mslp = mslp)
 
 }
 \references{

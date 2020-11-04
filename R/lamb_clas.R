@@ -5,10 +5,11 @@
 #'              are computed for the daily pressure field according to the rules proposed by the original
 #'              Jenkinson and Collison classification (see Jenkin-son and Collison, 1977, Jones et al. 1993, Jones et al. 2016).
 #' @param points  16 point pair of coordinates obtained from \code{get_lamb_points}.
-#' @param slp  Mean Sea Level pressure gridded data.
+#' @param mslp  Mean Sea Level pressure gridded data.
+#' 
 #' @return A list with: \itemize{
-#'    \item{A data.frame containing the dates and the weather types.
-#'    \item{A data frame containing the gridded data grouped by circulation types.
+#'    \item{A data.frame containing the dates and the weather types.}
+#'    \item{A data frame containing the gridded data grouped by circulation types.}
 #' }
 #' 
 #' @references {
@@ -25,25 +26,30 @@
 #' Int. J. Climatol. 33: 1129–1139.
 #' }
 #' @seealso  \code{\link{get_lamb_points}}
+#' 
 #' @examples
+#' data(mslp)
+#' 
+#' points <- get_lamb_points(x = 5,y = 40)
+#' lamb_clas(points = points, mslp = mslp)
 #'
 #' @importFrom tidyr pivot_wider pivot_longer 
 #'
 #' @export
 
 
-lamb_clas <- function(points,slp){
+lamb_clas <- function(points,mslp){
   
-  var <- vars_lamb(points,slp)
+  var <- vars_lamb(points,mslp)
   
   WT <- apply(var,1,lamb_wt)
   
   # clas
-  time <- unique(slp$time)
+  time <- unique(mslp$time)
   clas <- tibble(time,WT)
   
   # grid clas
-  grid_clas <- inner_join(clas, slp, by = "time") %>% 
+  grid_clas <- inner_join(clas, mslp, by = "time") %>% 
     group_by(.data$lon,.data$lat,.data$WT) %>%
     summarise(.data$value) %>% ungroup() %>%
     distinct(.data$lon,.data$lat,.data$WT,.keep_all = T)
@@ -53,10 +59,10 @@ lamb_clas <- function(points,slp){
   
 }
 
-vars_lamb <- function(points, slp) {
+vars_lamb <- function(points, mslp) {
   
-  pp <- inner_join(points, slp, by = c("lon","lat")) %>%
-    select(-c(.data$lat,.data$lon)) %>% 
+  pp <- inner_join(points, mslp, by = c("lon","lat")) %>%
+    select(c(.data$label,.data$time,.data$value)) %>% 
     pivot_wider(names_from = .data$label,values_from = .data$value) 
   
   x<- pp

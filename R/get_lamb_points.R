@@ -33,8 +33,8 @@ get_lamb_points <- function(x,y) {
   
   jc_scheme <- cbind.data.frame(pre_scheme,
                      TF = interaction(pre_scheme) %in% interaction(corners)) %>%
-                       filter(TF == F) %>% 
-    select(-TF) %>% 
+                       filter(.data$TF == F) %>% 
+    select(-.data$TF) %>% 
     cbind.data.frame(c("P6","P10","P14",
               "P2","P5","P9","P13","P16",
               "P1","P4","P8","P12","P15",
