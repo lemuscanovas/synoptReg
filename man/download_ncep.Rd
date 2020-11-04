@@ -4,10 +4,19 @@
 \alias{download_ncep}
 \title{Download NCEP/NCAR data}
 \usage{
-download_ncep(var = "slp", level = "surface", month_range = c(1, 12),
-  year_range = c(2010, 2017), lat_range = c(30, 60),
-  lon_range = c(-30, 10), dailymean = TRUE, hour = NULL,
-  reanalysis2 = TRUE, save_download = TRUE, file_name = NULL)
+download_ncep(
+  var = "slp",
+  level = "surface",
+  month_range = c(1, 12),
+  year_range = c(2010, 2017),
+  lat_range = c(30, 60),
+  lon_range = c(-30, 10),
+  dailymean = TRUE,
+  hour = NULL,
+  reanalysis2 = TRUE,
+  save_download = TRUE,
+  file_name = NULL
+)
 }
 \arguments{
 \item{var}{slp 'sea level pressure' (default) for more variables see help of ?NCEP.gather}

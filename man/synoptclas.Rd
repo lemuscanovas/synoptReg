@@ -4,8 +4,7 @@
 \alias{synoptclas}
 \title{Synoptic classification}
 \usage{
-synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode",
-  extreme_scores = 2)
+synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
 }
 \arguments{
 \item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}

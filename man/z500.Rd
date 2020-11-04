@@ -4,12 +4,14 @@
 \name{z500}
 \alias{z500}
 \title{500 hPa Geopotential Height}
-\format{A data.frame with the following variables: \code{lon,lat,time,value}.
+\format{
+A data.frame with the following variables: \code{lon,lat,time,value}.
 \describe{
   \item{geographical area:}{-10,30,30,60}
   \item{time period:}{2000-01-01 to 2002-12-31}
   \item{units:}{meters}
-}}
+}
+}
 \usage{
 data(z500)
 }

@@ -3,6 +3,7 @@
 export("%>%")
 export(ct2env)
 export(download_ncep)
+export(lamb_clas)
 export(pca_decision)
 export(raster_pca)
 export(regionalization)

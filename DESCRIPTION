@@ -33,4 +33,4 @@ Suggests:
     udunits2,
     gridExtra
 NeedsCompilation: no
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1

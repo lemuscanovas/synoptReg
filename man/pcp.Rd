@@ -4,13 +4,15 @@
 \name{pcp}
 \alias{pcp}
 \title{Daily precipitation grid of Balearic Islands (Spain)}
-\format{A data.frame with the following variables: \code{lon,lat,time,value}.
+\format{
+A data.frame with the following variables: \code{lon,lat,time,value}.
 \describe{
   \item{geographical area:}{Balearic Islands}
   \item{time period:}{2000-01-01 to 2010-12-31}
   \item{units:}{mm*10}
   \item{coordinates reference system:}{+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs}
-}}
+}
+}
 \usage{
 data(pcp)
 }

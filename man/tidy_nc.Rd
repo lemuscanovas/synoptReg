@@ -4,8 +4,13 @@
 \alias{tidy_nc}
 \title{Set the time period and the geogprahical extension, as well as computes the anomaly of the atmospheric variable/s}
 \usage{
-tidy_nc(x, time_subset = NULL, geo_subset = NULL,
-  monthly_subset = NULL, name_vars = NULL)
+tidy_nc(
+  x,
+  time_subset = NULL,
+  geo_subset = NULL,
+  monthly_subset = NULL,
+  name_vars = NULL
+)
 }
 \arguments{
 \item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value}. The same structure returned when using \code{download_ncep}.}
