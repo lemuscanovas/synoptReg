@@ -46,8 +46,8 @@ lamb_clas <- function(points,slp){
     summarise(value) %>% ungroup() %>%
     distinct(lon,lat,WT,.keep_all = T)
   
-  return(clas = clas,
-         grid_clas = grid_clas)
+  return(list(clas = clas,
+         grid_clas = grid_clas))
   
 }
 
