@@ -20,7 +20,7 @@ synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
 \value{
 A list with: \itemize{
    \item{A data.frame containing the dates and the weather types. If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification).}
-   \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification) .}
+   \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, 3 classifications are returned (absolute correlation,maximum positive correlation, and positive/negative classification) .}
 }
 }
 \description{
@@ -32,9 +32,9 @@ If the user wants to perform a synoptic classification of a long and continuous 
 When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
 so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
 which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
-weather types (WT) clasification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
+weather types (WT) classification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
 to an specific WT based on the multivariate coordinates provided by the "scores". Before using a clustering method, a VARIMAX rotation is performed on the principal Components
-retined, with the aim of redistributing the variance of such components.
+retained, with the aim of redistributing the variance of such components.
 With the rotated components, the scores are used to apply the extreme scores method (Esteban et al., 2005). The scores show the degree of representativeness associated
 with the variation modes of each principal component, i.e., the classification of each day to its more representative centroid. Thus, the extreme scores method uses
 the scores > 2 and < -2, establishing a positive and negative phase for each principal component. The extreme scores procedure establishes the number of groups and their

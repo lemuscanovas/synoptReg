@@ -14,9 +14,9 @@
 #' When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
 #' so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
 #' which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
-#' weather types (WT) clasification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
+#' weather types (WT) classification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
 #' to an specific WT based on the multivariate coordinates provided by the "scores". Before using a clustering method, a VARIMAX rotation is performed on the principal Components
-#' retined, with the aim of redistributing the variance of such components.
+#' retained, with the aim of redistributing the variance of such components.
 #' With the rotated components, the scores are used to apply the extreme scores method (Esteban et al., 2005). The scores show the degree of representativeness associated
 #' with the variation modes of each principal component, i.e., the classification of each day to its more representative centroid. Thus, the extreme scores method uses
 #' the scores > 2 and < -2, establishing a positive and negative phase for each principal component. The extreme scores procedure establishes the number of groups and their
@@ -27,7 +27,7 @@
 #'
 #' @return A list with: \itemize{
 #'    \item{A data.frame containing the dates and the weather types. If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification).}
-#'    \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification) .}
+#'    \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, 3 classifications are returned (absolute correlation,maximum positive correlation, and positive/negative classification) .}
 #' }
 #'
 #' @examples
@@ -178,22 +178,34 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             setNames(paste0("PC", 1:ncomp))
 
 
-        ## Absolute WT procedure
-        abs_rotatedLoadings <- abs(rotatedLoadings) %>%
+        ## Max Positive Loading WT procedure
+        max_rotatedLoadings <- rotatedLoadings %>%
             as_tibble() %>%
             setNames(paste0("PC", 1:ncomp))
+        max_rotatedLoadings$WT_max <- names(max_rotatedLoadings)[max.col(max_rotatedLoadings,
+                                                                         ties.method = "first")]
+        WT_max <- suppressWarnings(as.numeric(gsub(substr(max_rotatedLoadings$WT_max, 1, 2), "",
+                                  max_rotatedLoadings$WT_max)))  # convertimos a numerico
+        max_rotatedLoadings$WT_max <- WT_max
+
+        
+        ## Negative/postive WT procedure
+        
+        abs_rotatedLoadings <- abs(rotatedLoadings) %>%
+          as_tibble() %>%
+          setNames(paste0("PC", 1:ncomp))
         abs_rotatedLoadings$WT_abs <- names(abs_rotatedLoadings)[max.col(abs_rotatedLoadings,
                                                                          ties.method = "first")]
         WT_abs <- suppressWarnings(as.numeric(gsub(substr(abs_rotatedLoadings$WT_abs, 1, 2), "",
-                                  abs_rotatedLoadings$WT_abs)))  # convertimos a numerico
+                                                   abs_rotatedLoadings$WT_abs)))  # convertimos a numerico
         abs_rotatedLoadings$WT_abs <- WT_abs
-
-        ## Negative/postive WT procedure
+        
         WT_posneg <- rotatedLoadings %>%
             as_tibble() %>%
             setNames(1:ncomp) %>%
             cbind.data.frame(time = unique(x$time),
-                             WT_abs = abs_rotatedLoadings$WT_abs) %>%
+                             WT_abs =abs_rotatedLoadings$WT_abs,
+                             WT_max = max_rotatedLoadings$WT_max) %>%
             as_tibble()
 
         # creant serie unica maxims loadings (+ o -)
@@ -211,8 +223,9 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         ## Final classifications
         clas_abs <- select(WT_posneg_g, .data$time, .data$WT_abs) %>% rename(WT = .data$WT_abs)
         clas_pn <- select(WT_posneg_g, .data$time, .data$WT_pn) %>% rename(WT = .data$WT_pn)
+        clas_max <- select(WT_posneg_g, .data$time, .data$WT_max) %>% rename(WT = .data$WT_max)
 
-        # absolute classification gridding construction
+        # absolute correlation classification gridding construction
         df_tmode_abs <- x %>%
             inner_join(clas_abs, by = "time")
 
@@ -224,6 +237,19 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             select(-.data$value, -.data$anom_value) %>%
             ungroup() %>%
             distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        
+        # Maximum correlation classification gridding construction
+        df_tmode_max <- x %>%
+          inner_join(clas_max, by = "time")
+        
+        df_tmode_max_panels <- df_tmode_max %>%
+          group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+          mutate(mean_WT_value = mean(.data$value),
+                 mean_WT_anom_value = mean(.data$anom_value),
+                 cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+          select(-.data$value, -.data$anom_value) %>%
+          ungroup() %>%
+          distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
 
         # Positive/negative classification gridding construction
         df_tmode_pn <- x %>%
@@ -240,8 +266,10 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
 
 
         return(list(clas_abs = clas_abs,
+                    clas_max = clas_max,
                     clas_pn = clas_pn,
                     grid_clas_abs = df_tmode_abs_panels,
+                    grid_clas_max = df_tmode_max_panels,
                     grid_clas_pn = df_tmode_pn_panels))
 
     } else {
