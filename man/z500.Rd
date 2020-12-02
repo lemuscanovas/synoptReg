@@ -17,7 +17,7 @@ data(z500)
 }
 \description{
 Data from the NCEP/NCAR Reanalysis 1
-(\url{https://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis.html}).
+(\url{https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.html}).
 This data corresponds to global daily values of 500 hPa geopotential height with 2.5 x 2.5?? of spatial resolution from January 2000 to december 2002.
 }
 \examples{

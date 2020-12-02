@@ -1,7 +1,7 @@
 #' Mean Sea Level pressure data
 #'
 #' Data from the NCEP/NCAR Reanalysis 1
-#' (\url{https://www.esrl.noaa.gov/psd/data/gridded/data.ncep.reanalysis.html}).
+#' (\url{ https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.html}).
 #' This data corresponds to daily values of mean sea level pressure with 2.5 x 2.5º of spatial resolution from January 2000 to december 2002.
 #'
 #' @docType data
