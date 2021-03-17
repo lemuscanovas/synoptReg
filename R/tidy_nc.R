@@ -49,7 +49,7 @@ tidy_nc <- function(x, time_subset = NULL, geo_subset = NULL,
     if (is.null(time_subset)) {
         x <- x %>%
           mutate(mo = month(time)) %>%
-          group_by(.data$var, .data$mo) %>%
+          group_by(.data$lon, .data$lat, .data$var, .data$mo) %>%
           mutate(mean_mo = mean(.data$value)) %>%
           ungroup() %>%
           mutate(anom_value = .data$value - .data$mean_mo) %>%
@@ -66,7 +66,7 @@ tidy_nc <- function(x, time_subset = NULL, geo_subset = NULL,
         x <- filter(x, time >= as_date(time_subset[1]),
                     time <= as_date(time_subset[2])) %>%
           mutate(mo = month(.data$time)) %>%
-          group_by(.data$var, .data$mo) %>%
+          group_by(.data$lon, .data$lat, .data$var, .data$mo) %>%
           mutate(mean_mo = mean(.data$value)) %>%
           ungroup() %>%
           mutate(anom_value = .data$value - .data$mean_mo) %>%
@@ -77,7 +77,7 @@ tidy_nc <- function(x, time_subset = NULL, geo_subset = NULL,
           filter(.data$time >= as_date(time_subset[1]),
                  .data$time <= as_date(time_subset)[order(as_date(time_subset))][length(time_subset)]) %>%
           mutate(mo = month(.data$time)) %>%
-          group_by(.data$var, .data$mo) %>%
+          group_by(.data$lon, .data$lat, .data$var, .data$mo) %>%
           mutate(mean_mo = mean(.data$value)) %>%
           ungroup() %>%
           mutate(anom_value = .data$value - .data$mean_mo) %>%
