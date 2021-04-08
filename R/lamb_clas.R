@@ -66,7 +66,7 @@ lamb_clas <- function(points,mslp, U = FALSE){
   
 }
 
-vars_lamb <- function(points, mslp, U = F) {
+vars_lamb <- function(points, mslp, U = T) {
   
   pp <- inner_join(points, mslp, by = c("lon","lat")) %>%
     select(c(.data$label,.data$time,.data$value)) %>% 
@@ -98,7 +98,7 @@ vars_lamb <- function(points, mslp, U = F) {
 
 
 
-lamb_wt <- function(x,U = F){
+lamb_wt <- function(x,U = T){
   
   dir <- seq(22.5,360,45)
   lev_dir <- levels(cut(seq(0,360,1),seq(22.5,360,45)))
