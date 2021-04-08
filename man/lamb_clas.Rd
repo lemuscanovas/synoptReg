@@ -4,12 +4,14 @@
 \alias{lamb_clas}
 \title{Objective Lamb Weather Type Classification}
 \usage{
-lamb_clas(points, mslp)
+lamb_clas(points, mslp, U = FALSE)
 }
 \arguments{
 \item{points}{16 point pair of coordinates obtained from \code{get_lamb_points}.}
 
 \item{mslp}{Mean Sea Level pressure gridded data.}
+
+\item{U}{Logical. If T, Jones et al. 2013 approach is applied, maintaining the U-type in the classification. If F, U is removed as detailed in Trigo and DaCamara, 2000.}
 }
 \value{
 A list with: \itemize{
@@ -21,7 +23,8 @@ A list with: \itemize{
 Calculates the classification of the main weather types
              for the 16-points defined in \code{get_lamb_points}. Wind-flow characteristics
              are computed for the daily pressure field according to the rules proposed by the original
-             Jenkinson and Collison classification (see Jenkin-son and Collison, 1977, Jones et al. 1993, Jones et al. 2016).
+             Jenkinson and Collison classification (see Jenkinson and Collison, 1977; Jones et al., 2013) (1), and 
+             to the rules proposed by Trigo and DaCamara, 2000 (2).
 }
 \examples{
 data(mslp)
@@ -44,6 +47,10 @@ Jones, P. D., Harpham C, Briffa K. R. (2013)
 \emph{Lamb weather types derived from Reanalysis products}
 Int. J. Climatol. 33: 1129–1139.
 }
+
+Trigo, R., DaCamara C. (2000)
+\emph{Circulation weather types and their impact on the precipitation regime in Portugal}
+Int. J. Climatol. 20: 1559-1581.
 }
 \seealso{
 \code{\link{get_lamb_points}}
