@@ -67,7 +67,7 @@ lamb_clas <- function(points,mslp, U = FALSE){
 }
 
 
-vars_lamb <- function(points, mslp, U = F) {
+vars_lamb <- function(points, mslp, U) {
   
   pp <- inner_join(points, mslp, by = c("lon","lat")) %>%
     select(c(.data$label,.data$time,.data$value)) %>% 
@@ -85,7 +85,7 @@ vars_lamb <- function(points, mslp, U = F) {
   
   } else { # Jones et al., 1993
     SF <- 1.74*(0.25*(x$P5+2*x$P9+x$P13)-0.25*(x$P4+2*x$P8+x$P12))
-    WF <- (0.5*(x$P12+x$P13)-0.5*(x$P4+x$P5))
+    WF <- 0.5*(x$P12+x$P13)-0.5*(x$P4+x$P5)
     D <- atan(WF/SF)*(360/(2*pi))
     ZS <- 1.52*(0.25*(x$P6+2*x$P10+x$P14)-0.25*(x$P5+2*x$P9+x$P3)-0.25*(x$P4+2*x$P8+x$P12)+0.25*(x$P3+2*x$P7+x$P11))
     ZW <- 1.07*(0.5*(x$P15+x$P16)-0.5*(x$P8+x$P9)-0.95*(0.5*(x$P8+x$P9)-0.5*(x$P1+x$P2)))
@@ -98,7 +98,7 @@ vars_lamb <- function(points, mslp, U = F) {
 
 
 
-lamb_wt <- function(x,U = F){
+lamb_wt <- function(x,U){
   
   dir <- seq(22.5,360,45)
   lev_dir <- levels(cut(seq(0,360,1),seq(22.5,360,45)))
