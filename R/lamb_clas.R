@@ -8,6 +8,7 @@
 #' @param points  16 point pair of coordinates obtained from \code{get_lamb_points}.
 #' @param mslp  Mean Sea Level pressure gridded data.
 #' @param U Logical. If T, Jones et al. 2013 approach is applied, maintaining the U-type in the classification. If F, U is removed as detailed in Trigo and DaCamara, 2000.
+#' @param thr threshold used for Unclassified days (total shear vorticity and total flow, respectively). Default c(6,6).
 #' 
 #' @return A list with: \itemize{
 #'    \item{A data.frame containing the dates and the weather types.}
@@ -45,11 +46,11 @@
 #' @export
 
 
-lamb_clas <- function(points,mslp, U = FALSE){
+lamb_clas <- function(points,mslp, U = FALSE, thr = c(6,6)){
   
   var <- vars_lamb(points,mslp,U)
   
-  WT <- apply(var,1,lamb_wt)
+  WT <- apply(var,1,lamb_wt,U,thr)
   
   # clas
   time <- unique(mslp$time)
@@ -67,7 +68,7 @@ lamb_clas <- function(points,mslp, U = FALSE){
 }
 
 
-vars_lamb <- function(points, mslp, U) {
+vars_lamb <- function(points, mslp,U) {
   
   pp <- inner_join(points, mslp, by = c("lon","lat")) %>%
     select(c(.data$label,.data$time,.data$value)) %>% 
@@ -98,7 +99,7 @@ vars_lamb <- function(points, mslp, U) {
 
 
 
-lamb_wt <- function(x,U){
+lamb_wt <- function(x,U,thr){
   
   dir <- seq(22.5,360,45)
   lev_dir <- levels(cut(seq(0,360,1),seq(22.5,360,45)))
@@ -141,7 +142,7 @@ lamb_wt <- function(x,U){
   }
   
   # Only works when U = TRUE. 
-  if(U!= FALSE & abs(x["Z"])<6 & x["FF"]<6) out <- "U"
+  if(U!= FALSE & abs(x["Z"])<thr[1] & x["FF"]<thr[2]) out <- "U"
   
   
   ifelse(!is.na(out),return(out),return(NA))

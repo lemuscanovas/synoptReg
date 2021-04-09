@@ -4,7 +4,7 @@
 \alias{lamb_clas}
 \title{Objective Lamb Weather Type Classification}
 \usage{
-lamb_clas(points, mslp, U = FALSE)
+lamb_clas(points, mslp, U = FALSE, thr = c(6, 6))
 }
 \arguments{
 \item{points}{16 point pair of coordinates obtained from \code{get_lamb_points}.}
@@ -12,6 +12,8 @@ lamb_clas(points, mslp, U = FALSE)
 \item{mslp}{Mean Sea Level pressure gridded data.}
 
 \item{U}{Logical. If T, Jones et al. 2013 approach is applied, maintaining the U-type in the classification. If F, U is removed as detailed in Trigo and DaCamara, 2000.}
+
+\item{thr}{threshold used for Unclassified days (total shear vorticity and total flow, respectively). Default c(6,6).}
 }
 \value{
 A list with: \itemize{
