@@ -145,6 +145,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
             mutate(mean_WT_value = mean(.data$value),
                    mean_WT_anom_value = mean(.data$anom_value),
+                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
                    cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
             select(-.data$value, -.data$anom_value) %>%
             ungroup() %>%
@@ -233,6 +234,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
             mutate(mean_WT_value = mean(.data$value),
                    mean_WT_anom_value = mean(.data$anom_value),
+                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
                    cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
             select(-.data$value, -.data$anom_value) %>%
             ungroup() %>%
@@ -246,6 +248,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
           group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
           mutate(mean_WT_value = mean(.data$value),
                  mean_WT_anom_value = mean(.data$anom_value),
+                 ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
                  cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
           select(-.data$value, -.data$anom_value) %>%
           ungroup() %>%
@@ -259,6 +262,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
             mutate(mean_WT_value = mean(.data$value),
                    mean_WT_anom_value = mean(.data$anom_value),
+                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
                    cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
             select(-.data$value, -.data$anom_value) %>%
             ungroup() %>%
