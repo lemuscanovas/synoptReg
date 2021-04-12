@@ -140,16 +140,35 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
 
         df_classified <- x %>%
             inner_join(clas, by = "time")
-
-        df_classified_panels <- df_classified %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
-            mutate(mean_WT_value = mean(.data$value),
-                   mean_WT_anom_value = mean(.data$anom_value),
-                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
-                   cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-            select(-.data$value, -.data$anom_value) %>%
-            ungroup() %>%
-            distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        
+        if (df_classified %>%
+            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_size() %>% min() < 3){ # minimum sample t.test
+            
+            df_classified_panels <- df_classified %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+            
+        } else {
+         
+            df_classified_panels <- df_classified %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+        }
+        
 
         return(list(clas = clas, grid_clas = df_classified_panels))
 
@@ -229,44 +248,95 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         # absolute correlation classification gridding construction
         df_tmode_abs <- x %>%
             inner_join(clas_abs, by = "time")
+        
+        if (df_tmode_abs %>%
+            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_size() %>% min() < 3){ # minimum sample t.test
+            
+            df_tmode_abs_panels <- df_tmode_abs %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+        } else {
+            df_tmode_abs_panels <- df_tmode_abs %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+        }
 
-        df_tmode_abs_panels <- df_tmode_abs %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
-            mutate(mean_WT_value = mean(.data$value),
-                   mean_WT_anom_value = mean(.data$anom_value),
-                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
-                   cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-            select(-.data$value, -.data$anom_value) %>%
-            ungroup() %>%
-            distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
         
         # Maximum correlation classification gridding construction
         df_tmode_max <- x %>%
           inner_join(clas_max, by = "time")
         
-        df_tmode_max_panels <- df_tmode_max %>%
-          group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
-          mutate(mean_WT_value = mean(.data$value),
-                 mean_WT_anom_value = mean(.data$anom_value),
-                 ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
-                 cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-          select(-.data$value, -.data$anom_value) %>%
-          ungroup() %>%
-          distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        if (df_tmode_max %>%
+            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_size() %>% min() < 3){ # minimum sample t.test
+            
+            df_tmode_max_panels <- df_tmode_max %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        } else {
+            df_tmode_max_panels <- df_tmode_max %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+        }
+            
 
         # Positive/negative classification gridding construction
         df_tmode_pn <- x %>%
             inner_join(clas_pn, by = "time")
 
-        df_tmode_pn_panels <- df_tmode_pn %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
-            mutate(mean_WT_value = mean(.data$value),
-                   mean_WT_anom_value = mean(.data$anom_value),
-                   ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
-                   cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-            select(-.data$value, -.data$anom_value) %>%
-            ungroup() %>%
-            distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        if (df_tmode_pn %>%
+            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_size() %>% min() < 3){ # minimum sample t.test
+            
+            df_tmode_pn_panels <- df_tmode_pn %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+        } else {
+            
+            df_tmode_pn_panels <- df_tmode_pn %>%
+                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                mutate(mean_WT_value = mean(.data$value),
+                       mean_WT_anom_value = mean(.data$anom_value),
+                       ttest_anom = t.test(.data$anom_value, mu = 0)$p.value,
+                       cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
+                select(-.data$value, -.data$anom_value) %>%
+                ungroup() %>%
+                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+            
+        }
+            
+            
 
 
         return(list(clas_abs = clas_abs,
