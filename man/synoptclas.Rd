@@ -20,7 +20,7 @@ synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
 \value{
 A list with: \itemize{
    \item{A data.frame containing the dates and the weather types. If "T-mode" is selected, two classifications are returned (absolute and positive/negative classification).}
-   \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, 3 classifications are returned (absolute correlation,maximum positive correlation, and positive/negative classification) .}
+   \item{A data frame containing the gridded data grouped by circulation types.If "T-mode" is selected, 3 classifications are returned (absolute correlation,maximum positive correlation, and positive/negative classification). In addition, p-values of a t-test computed to the anomalies, comparing them to 0 with a conf.level = 0.95, are returned}
 }
 }
 \description{
