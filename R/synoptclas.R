@@ -61,7 +61,7 @@
 #'}
 #' @seealso  \code{\link{pca_decision}}
 #'
-#' @importFrom stats loadings sd setNames time
+#' @importFrom stats loadings sd setNames time t.test
 #'
 #' @export
 
