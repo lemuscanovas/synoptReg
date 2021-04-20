@@ -6,7 +6,7 @@ Depends: R (>= 3.5)
 Authors@R: c(
     person("Marc", "Lemus-Canovas", , "mlemus@ub.edu", role = c("aut", "cre"), 
     comment = c(ORCID = "0000-0002-0925-3827")),
-    person("Dominic", "Roye)", , role = c("ctb"),
+    person("Dominic", "Roye", , role = c("ctb"),
     comment = c(ORCID = "0000-0002-5516-6396")))
 Description: Set of functions to compute different types of synoptic classification methods and for analysing their effect on environmental variables. More information about the methods used in Lemus-Canovas et al. 2019 <DOI:10.1016/j.atmosres.2019.01.018>,  Martin-Vide et al. 2008 <DOI:10.5194/asr-2-99-2008>, Jenkinson and Collison 1977.
 License: GPL (>= 3)
