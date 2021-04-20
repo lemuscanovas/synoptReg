@@ -42,6 +42,8 @@ In short, `synoptReg` allows to:
      the synoptic patterns prevailing under specific environmental
      conditions (e.g. days with elevated temperatures, torrential rainfall
      events). 
+     
+     * Several methods are implemented: PCA-based, Lamb and SOM.
   
 - Represent the **impact of each weather type** on an environmental variable (continuous): precipitation, temperature, pollutants, ...
 
@@ -52,7 +54,7 @@ In short, `synoptReg` allows to:
 ### Installation
 
 ``` r
-# To install the CRAN version (1.1.0):
+# To install the CRAN version (1.2.0):
 install.packages("synoptReg")
 
 # To install the latest version from Github:
