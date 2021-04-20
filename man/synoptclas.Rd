@@ -11,7 +11,7 @@ synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
 
 \item{ncomp}{Integer. Number of components to be retained.}
 
-\item{norm}{logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classify two ore more variables.}
+\item{norm}{logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classifying two ore more variables.}
 
 \item{matrix_mode}{character. The mode of matrix to use. Choose between S-mode and T-mode}
 
@@ -49,13 +49,11 @@ data(mslp)
 data(z500)
 # Tidying our atmospheric variables (500 hPa geopotential height
 # and mean sea level pressure) together.
-
-# Time subset between two dates
 atm_data1 <- tidy_nc(x = list(mslp,z500),
              name_vars = c("mslp","z500"))
 
 # S-mode classification
-smode_clas <- synoptclas(atm_data1, ncomp = 6)
+smode_cl <- synoptclas(atm_data1, ncomp = 6)
 
 # Time subset using a vector of dates of interest
 dates_int <- c("2000-01-25","2000-04-01","2000-07-14","2001-05-08","2002-12-20")
@@ -63,8 +61,8 @@ atm_data2 <- tidy_nc(x = list(mslp,z500),
                      time_subset = dates_int,
                      name_vars = c("mslp","z500"))
 
-# S-mode classification
-tmode_clas <- synoptclas(atm_data2, ncomp = 2, matrix_mode = "T-mode")
+# T-mode classification
+tmode_cl <- synoptclas(atm_data2, ncomp = 2, matrix_mode = "T-mode")
 
 
 }

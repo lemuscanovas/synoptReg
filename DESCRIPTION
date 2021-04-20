@@ -6,9 +6,9 @@ Depends: R (>= 3.5)
 Authors@R: c(
     person("Marc", "Lemus-Canovas", , "mlemus@ub.edu", role = c("aut", "cre"), 
     comment = c(ORCID = "0000-0002-0925-3827")),
-    person("Dominic", "Roye)", , role = c("aut"),
+    person("Dominic", "Roye)", , role = c("ctb"),
     comment = c(ORCID = "0000-0002-5516-6396")))
-Description: Set of functions to compute different types of synoptic classification methods and for analysing their effect on environmental variables. More information about the methods used in Lemus-Canovas et al. 2019 <DOI:10.1016/j.atmosres.2019.01.018>,  Martin-Vide et al. 2008 <DOI:10.5194/asr-2-99-2008>, Jenkinson and Collison 1977 and Trigo and DaCamara (2000) <DOI:10.1002/1097-0088(20001115)20:13<1559::AID-JOC555>3.0.CO;2-5>.
+Description: Set of functions to compute different types of synoptic classification methods and for analysing their effect on environmental variables. More information about the methods used in Lemus-Canovas et al. 2019 <DOI:10.1016/j.atmosres.2019.01.018>,  Martin-Vide et al. 2008 <DOI:10.5194/asr-2-99-2008>, Jenkinson and Collison 1977, Trigo and Dacamara 2000 <URLencode:10.1002/1097-0088(20001115)20:13<1559::AID-JOC555>3.0.CO;2-5>.
 License: GPL (>= 3)
 Maintainer: Marc Lemus-Canovas <mlemus@ub.edu>
 URL: <https://lemuscanovas.github.io/synoptreg/>
@@ -28,7 +28,8 @@ Imports:
     RNCEP, 
     stringr, 
     tidyr,
-    tibble
+    tibble,
+    kohonen
 Suggests:
     maptools,
     ncdf4,

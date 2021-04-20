@@ -41,7 +41,7 @@
 #' points <- get_lamb_points(x = 5,y = 40)
 #' lamb_clas(points = points, mslp = mslp)
 #'
-#' @importFrom tidyr pivot_wider pivot_longer 
+#' @importFrom tidyr pivot_wider pivot_longer separate
 #'
 #' @export
 
