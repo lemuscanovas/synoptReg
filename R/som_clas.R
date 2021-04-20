@@ -1,4 +1,4 @@
-#' Self-Organized Map classification
+#' Self-Organizing Maps classification
 #'
 #' \code{som_clas} allows to perform a SOM synoptic classification 
 #'

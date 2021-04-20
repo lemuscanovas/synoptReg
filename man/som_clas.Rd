@@ -2,7 +2,7 @@
 % Please edit documentation in R/som_clas.R
 \name{som_clas}
 \alias{som_clas}
-\title{Self-Organized Map classification}
+\title{Self-Organizing Maps classification}
 \usage{
 som_clas(
   x,
@@ -53,7 +53,7 @@ z500_tidy <- tidy_nc(x = list(z500),
              name_vars = c("z500"))
 
 # SOM classification
-som_cl <- som_clas(z500_tidy, xdim = 4,ydim = 4)
+som_cl <- som_clas(z500_tidy, xdim = 4, ydim = 4, iter = 200)
 
 
 }
