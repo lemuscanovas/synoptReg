@@ -59,8 +59,7 @@ lamb_clas <- function(points,mslp, U = FALSE, thr = c(6,6)){
   # grid clas
   grid_clas <- inner_join(clas, mslp, by = "time") %>% 
     group_by(.data$lon,.data$lat,.data$WT) %>%
-    summarise(.data$value) %>% ungroup() %>%
-    distinct(.data$lon,.data$lat,.data$WT,.keep_all = T)
+    summarise(mean_WT_value = mean(.data$value)) %>% ungroup()
   
   return(list(clas = clas,
          grid_clas = grid_clas))
