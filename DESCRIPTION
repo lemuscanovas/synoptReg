@@ -29,7 +29,9 @@ Imports:
     stringr, 
     tidyr,
     tibble,
-    kohonen
+    kohonen,
+    future,
+    future.apply
 Suggests:
     maptools,
     ncdf4,
