@@ -77,4 +77,4 @@ Using synoptReg for research publication?  Please **cite it**! I'm an early care
 
 ## Contact
 
-Feel free to contact me: mlemus@ub.edu
+Feel free to contact me: mlemus@ari.ad
