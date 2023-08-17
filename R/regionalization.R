@@ -2,16 +2,17 @@
 #'
 #' Perform an unspervised clustering of the Raster Stack
 #'
-#' @param raststack Raster Stack.
+#' @param x SpatRasters
 #' @param centers Integer. Number of clusters.
 #' @param iter.max Integer. The maximum number of iterations allowed. Default 100.
 #' @param nstart Integer. How many random sets should be chosen? Default 100.
+#' @param algorithm Default Lloyd.
 #'
 #'@return a list with: \itemize{
+#'    \item{A list with the results of the K-means performance
 #'    \item{A raster with the final regionalization }
 #'    \item{A list with the results of the K-means performance}
-#'    \item{A raster displaying a pseudo-MAE error based on the difference between each pixel value and its respective centroide}
-#'    \item{A numeric pseudo-MAE mean value for the entire map}
+#
 #' }
 #'
 #' @export
