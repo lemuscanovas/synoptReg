@@ -16,49 +16,21 @@
 #'
 #' @export
 
-regionalization <- function(raststack, centers, iter.max = 100, nstart = 100) {
+regionalization <- function(x, centers, iter.max = 100, nstart = 100, algorithm = "Lloyd") {
 
-    rasters <- raster::stack(raststack)
-    rasters <- raster::brick(rasters)
-    valuetable <- raster::getValues(rasters)
-    rNA <- raster::setValues(raster::raster(rasters), 0)
+    rasters <- terra::rast(x)
 
+    nr <- as.data.frame(rasters, cell=TRUE)
     # K-means computation
-    km <- suppressWarnings(kmeans(na.omit(valuetable),
-                                  centers = centers,
-                                  iter.max = iter.max,
-                                  nstart = nstart))
-
-    for (i in 1:raster::nlayers(rasters)) {
-        rNA[is.na(rasters[[i]])] <- 1
-    }
-
-    rNA <- raster::getValues(rNA)
-
-    valuetable <- as.data.frame(valuetable)
-    valuetable$class[rNA == 0] <- km$cluster
-    valuetable$class[rNA == 1] <- NA
-
-    classes <- raster::raster(rasters)
-
-    classes <- raster::setValues(classes, valuetable$class)
-    classes_rm <- classes
-    centers <- rowMeans(km$centers)  #PCA centroids mean
-    errormap <- raster::stack()
-    for (ii in 1:length(centers)) {
-        classes_rm[classes_rm == ii] <- centers[ii]
-    }
-
-    # Pseudo-MAE raster
-    errormap <- raster::stack(errormap,
-                              abs(classes_rm - raster::mean(rasters)) /
-                                  raster::ncell(rasters))
-
-    # Pseudo-MAE mean value
-    mae_mean <- raster::cellStats(errormap, "mean")
-
-    return(list(regionalization = classes,
-                kmeans = km,
-                errormap = errormap,
-                pseudoMAE = mae_mean))
+    set.seed(99)
+    
+    kmncluster <- kmeans(nr[,-1], centers=centers, 
+                         iter.max = iter.max, 
+                         nstart = nstart, 
+                         algorithm = algorithm)
+    
+    knr <- rast(rasters, nlyr=1)
+    knr[nr$cell] <- kmncluster$cluster
+    return(list("cluster_info"=kmncluster,
+                "cluster_rast"=knr))
 }
