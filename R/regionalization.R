@@ -19,7 +19,7 @@
 
 regionalization <- function(x, centers, iter.max = 100, nstart = 100, algorithm = "Lloyd") {
 
-    rasters <- terra::rast(x)
+    rasters <- x
 
     nr <- as.data.frame(rasters, cell=TRUE)
     # K-means computation
