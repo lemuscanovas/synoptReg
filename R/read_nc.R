@@ -38,7 +38,7 @@ read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL,
   } else {
     dat <- rast(x)
   }
-  varname <- varnames(dat)
+  varname <- varnames(dat) %>% unique
   unit <- units(dat) %>% unique
   dates <- terra::time(dat)
   if((!is.Date(dates) | !is.POSIXct(dates)) == F){
