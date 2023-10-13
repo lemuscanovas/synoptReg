@@ -36,7 +36,7 @@
 #' @import dplyr
 #' @importFrom lubridate as_date year month day
 #'
-#' @export
+#' 
 
 
 # x pot ser un df o llista

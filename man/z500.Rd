@@ -5,7 +5,7 @@
 \alias{z500}
 \title{500 hPa Geopotential Height}
 \format{
-A data.frame with the following variables: \code{lon,lat,time,value}.
+A data.frame with the following variables: \code{x,y,time,value,var,units}.
 \describe{
   \item{geographical area:}{-10,30,30,60}
   \item{time period:}{2000-01-01 to 2002-12-31}
@@ -18,7 +18,7 @@ data(z500)
 \description{
 Data from the NCEP/NCAR Reanalysis 1
 (\url{https://psl.noaa.gov/data/gridded/data.ncep.reanalysis.html}).
-This data corresponds to global daily values of 500 hPa geopotential height with 2.5 x 2.5?? of spatial resolution from January 2000 to december 2002.
+This data corresponds to global daily values of 500 hPa geopotential height with 2.5 x 2.5º of spatial resolution from January 2000 to december 2002.
 }
 \examples{
 data(z500)

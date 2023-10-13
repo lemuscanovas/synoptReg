@@ -2,7 +2,7 @@
 #'
 #' \code{synoptclas} allows to perform several types of synoptic classification approaches based on one or several atmospheric variables (i.e. mean sea level pressure, geoptential height at 500 hPa, etc.)
 #'
-#' @param x data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.
+#' @param x data.frame. A data.frame with the following variables: \code{lon, lat, time, value, var, units}. See \code{tidy_nc}.
 #' @param ncomp Integer. Number of components to be retained.
 #' @param norm logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classifying two ore more variables.
 #' @param matrix_mode character. The mode of matrix to use. Choose between S-mode and T-mode
@@ -11,7 +11,7 @@
 #' @details
 #' The \code{matrix_mode} argument allows to conduct different types of synoptic classifications depending on the user's objective.
 #' If the user wants to perform a synoptic classification of a long and continuous series, he must set the \code{matrix_mode = "S-mode"}.
-#' When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
+#' When we apply the PCA to a matrix in S-mode, the variables are the grid points (x,y) and the observations are the days (time series),
 #' so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
 #' which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
 #' weather types (WT) classification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
@@ -31,26 +31,23 @@
 #' }
 #'
 #' @examples
-#' # Load data (mslp or precp_grid)
-#' data(mslp)
+#' # Load data
+#' data(msl)
 #' data(z500)
-#' # Tidying our atmospheric variables (500 hPa geopotential height
-#' # and mean sea level pressure) together.
-#' atm_data1 <- tidy_nc(x = list(mslp,z500),
-#'              name_vars = c("mslp","z500"))
+#' 
+#' # Joining both variables
+#' atmos_data <- dplyr::bind_rows(msl,z500)
 #'
 #' # S-mode classification
-#' smode_cl <- synoptclas(atm_data1, ncomp = 6)
-#'
+#' smode_cl <- synoptclas(atmos_data, ncomp = 6, norm = TRUE)
+#' 
 #' # Time subset using a vector of dates of interest
 #' dates_int <- c("2000-01-25","2000-04-01","2000-07-14","2001-05-08","2002-12-20")
-#' atm_data2 <- tidy_nc(x = list(mslp,z500),
-#'                      time_subset = dates_int,
-#'                      name_vars = c("mslp","z500"))
-#'
+#' dates_int <- lubridate::as_date(dates_int)
+#' atmos_data2 <- dplyr::filter(atmos_data, time %in% dates_int)
+#' 
 #' # T-mode classification
-#' tmode_cl <- synoptclas(atm_data2, ncomp = 2, matrix_mode = "T-mode")
-#'
+#'tmode_cl <- synoptclas(atmos_data2, ncomp = 2, matrix_mode = "T-mode")
 #'
 #' @references {
 #' Esteban, P. , Jones, P. D., Martin.Vide, J.
@@ -59,34 +56,34 @@
 #'}
 #' @seealso  \code{\link{pca_decision}}
 #'
-#' @importFrom stats loadings sd setNames time t.test
+#' @importFrom stats loadings sd setNames t.test
 #'
 #' @export
 
-synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2) {
+synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_scores = 2) {
 
     if (matrix_mode == "S-mode") {
 
         if (norm == T) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                group_by(.data$var, .data$lon, .data$lat) %>%
+                select(-units) %>%
+                group_by(.data$var, .data$x, .data$y) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 unite("expanded_grid",
-                .data$lon:.data$lat, sep = ",", remove = T) %>%
+                .data$x:.data$y, sep = ",", remove = T) %>%
                 unite("expanded_grid", .data$expanded_grid, .data$var, sep = "_",
                       remove = T) %>%
-                spread(.data$expanded_grid, .data$value) %>%
+                pivot_wider(names_from = .data$expanded_grid,values_from =  .data$value) %>%
                 select(-1) %>%
                 princomp(scores = T)
         } else if (norm == F) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                unite("expanded_grid", .data$lon, .data$lat, sep = ",", remove = T) %>%
+                select(-units) %>%
+                unite("expanded_grid", .data$x, .data$y, sep = ",", remove = T) %>%
                 unite("expanded_grid", .data$expanded_grid, .data$var, sep = "_",
                       remove = T) %>%
-                spread(.data$expanded_grid, .data$value) %>%
+                pivot_wider(names_from = .data$expanded_grid,values_from =  .data$value) %>%
                 select(-1) %>%
                 princomp(scores = T)
         }
@@ -94,6 +91,7 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
         rotatedLoadings <- varimax(rawLoadings)$loadings
         scores <- scale(pca$scores[, 1:ncomp]) %*%
             varimax(rawLoadings)$rotmat %>%
+            as.data.frame() %>%
             as_tibble() %>%
             setNames(paste0("PC", 1:ncomp))
 
@@ -133,37 +131,35 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
                                         iter.max = 1))$cluster %>%
             cbind.data.frame(time = unique(x$time)) %>%
             rename(WT = 1) %>%
-            select(.data$time, .data$WT) %>%
+            select(time, .data$WT) %>%
             as_tibble()
 
         df_classified <- x %>%
             inner_join(clas, by = "time")
         
         if (df_classified %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_by(.data$x, .data$y, .data$WT, .data$var) %>% 
             group_size() %>% min() < 3){ # minimum sample t.test
             
             df_classified_panels <- df_classified %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
             
         } else {
          
             df_classified_panels <- df_classified %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
-                       pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
+                       # pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
         }
         
@@ -173,8 +169,8 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
     } else if (matrix_mode == "T-mode") {
         if (norm == T) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                group_by(.data$var, .data$lon, .data$lat) %>%
+              select(-units) %>%
+              group_by(.data$var, .data$x, .data$y) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 spread(.data$time,.data$value) %>%
@@ -183,8 +179,8 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
 
         } else if (norm == F) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                spread(.data$time, .data$value) %>%
+              select(-units) %>%
+              spread(.data$time, .data$value) %>%
                 select(-1:-3) %>%
                 princomp(scores = T)
         }
@@ -227,9 +223,9 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             as_tibble()
 
         # creant serie unica maxims loadings (+ o -)
-        WT_posneg_g <- gather(WT_posneg,
-                              key = "PCs",
-                              value = "loadings",
+        WT_posneg_g <- pivot_longer(WT_posneg,
+                              names_to = "PCs",
+                              values_to = "loadings",
                               1:ncomp) %>%
             mutate(PCs = as.numeric(.data$PCs)) %>%
             mutate(loadings = ifelse(.data$WT_abs == .data$PCs, loadings, NA)) %>%
@@ -239,37 +235,35 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
                    WT_pn = paste0(.data$PCs, .data$symbol))
 
         ## Final classifications
-        clas_abs <- select(WT_posneg_g, .data$time, .data$WT_abs) %>% rename(WT = .data$WT_abs)
-        clas_pn <- select(WT_posneg_g, .data$time, .data$WT_pn) %>% rename(WT = .data$WT_pn)
-        clas_max <- select(WT_posneg_g, .data$time, .data$WT_max) %>% rename(WT = .data$WT_max)
+        clas_abs <- select(WT_posneg_g, time, WT_abs) %>% rename(WT = WT_abs)
+        clas_pn <- select(WT_posneg_g, time, .data$WT_pn) %>% rename(WT = .data$WT_pn)
+        clas_max <- select(WT_posneg_g, time, WT_max) %>% rename(WT = WT_max)
 
         # absolute correlation classification gridding construction
         df_tmode_abs <- x %>%
             inner_join(clas_abs, by = "time")
         
         if (df_tmode_abs %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_by(.data$x, .data$y, .data$WT, .data$var) %>% 
             group_size() %>% min() < 3){ # minimum sample t.test
             
             df_tmode_abs_panels <- df_tmode_abs %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
         } else {
             df_tmode_abs_panels <- df_tmode_abs %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
-                       pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
+                       # pval_ttest = t.test(.data$value, mu = 0)$p.value,
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
         }
 
@@ -279,27 +273,25 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
           inner_join(clas_max, by = "time")
         
         if (df_tmode_max %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_by(.data$x, .data$y, .data$WT, .data$var) %>% 
             group_size() %>% min() < 3){ # minimum sample t.test
             
             df_tmode_max_panels <- df_tmode_max %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
         } else {
             df_tmode_max_panels <- df_tmode_max %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
-                       pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
+                       # pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
         }
             
@@ -309,28 +301,26 @@ synoptclas <- function(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_score
             inner_join(clas_pn, by = "time")
 
         if (df_tmode_pn %>%
-            group_by(.data$lon, .data$lat, .data$WT, .data$var) %>% 
+            group_by(.data$x, .data$y, .data$WT, .data$var) %>% 
             group_size() %>% min() < 3){ # minimum sample t.test
             
             df_tmode_pn_panels <- df_tmode_pn %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
         } else {
             
             df_tmode_pn_panels <- df_tmode_pn %>%
-                group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+                group_by(.data$x, .data$y, .data$WT, .data$var) %>%
                 mutate(mean_WT_value = mean(.data$value),
-                       mean_WT_anom_value = mean(.data$anom_value),
-                       pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
+                       # pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
                        cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-                select(-.data$value, -.data$anom_value) %>%
+                select(-.data$value) %>%
                 ungroup() %>%
-                distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+                distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
             
         }
             

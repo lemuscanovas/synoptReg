@@ -2,7 +2,7 @@
 #'
 #' \code{som_clas} allows to perform a SOM synoptic classification 
 #'
-#' @param x data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.
+#' @param x data.frame. A data.frame with the following variables: \code{x, y, time, value, var,units}. See \code{tidy_nc}.
 #' @param xdim Integer. X dimension of the grid. See \code{somgrid} from \code{kohonen} package.
 #' @param ydim Integer. Y dimension of the grid. See \code{somgrid} from \code{kohonen} package.
 #' @param iter integer. Number of iterations.
@@ -22,12 +22,9 @@
 #' @examples
 #' # Load data
 #' data(z500)
-#' # Tidying our atmospheric variables (500 hPa geopotential height).
-#' z500_tidy <- tidy_nc(x = list(z500),
-#'              name_vars = c("z500"))
 #'
 #' # SOM classification
-#' som_cl <- som_clas(z500_tidy, xdim = 4, ydim = 4, iter = 200)
+#' som_cl <- som_clas(z500, xdim = 4, ydim = 4, iter = 200)
 #'
 #'
 #' @references {
@@ -35,7 +32,7 @@
 #' \emph{Self- and Super-organizing Maps in R: The kohonen Package}
 #' Journal of Statistical Software, 21(5), 1 - 19.
 #'}
-#' @seealso  \code{\link{tidy_nc}}
+#' @seealso  \code{\link{as_synoptReg}}
 #'
 #' @importFrom kohonen som somgrid
 #'
@@ -46,16 +43,16 @@ som_clas <- function(x, xdim, ydim,iter = 2000, alpha = c(0.05,0.01),
                      cores = 1, norm = T) {
   
   dataset <- x %>% 
-    select(-.data$anom_value) %>%
-    group_by(.data$var, .data$lon, .data$lat) %>%
+    select(-units) %>%
+    group_by(.data$var, .data$x, .data$y) %>%
     mutate(value = scale(.data$value)) %>%
-    unite("varlonlat",.data$var:.data$lat, sep = "_") %>%
-    tidyr::pivot_wider(names_from = .data$varlonlat, values_from= .data$value)
+    unite("varxy",c(.data$var,.data$x,.data$y), sep = "_") %>%
+    tidyr::pivot_wider(names_from = .data$varxy, values_from= .data$value)
   
   
   # Transforming into a matrix
   matrix_vars <- dataset %>% dplyr::ungroup() %>%
-    dplyr::select(-.data$time) %>% as.matrix()
+    dplyr::select(-time) %>% as.matrix()
   
   # Creating a SOM network
   
@@ -83,25 +80,24 @@ som_clas <- function(x, xdim, ydim,iter = 2000, alpha = c(0.05,0.01),
     relocate(.data$xdim, .before = .data$ydim) %>%
     relocate(.data$WT, .before = .data$xdim) %>%
     pivot_longer(4:ncol(.),names_to = "grid") %>%
-    separate(col = .data$grid, into = c("var","lon","lat"),sep = "_") %>%
-    mutate_at(.vars = vars(.data$lon,.data$lat), .funs = as.numeric) %>%
-    select(.data$var,.data$lon,.data$lat,.data$WT, .data$xdim, .data$ydim)
+    separate(col = .data$grid, into = c("var","x","y"),sep = "_") %>%
+    mutate_at(.vars = vars(.data$x,.data$y), .funs = as.numeric) %>%
+    select(.data$var,.data$x,.data$y,.data$WT,xdim,ydim)
   
   clas <- tibble(time = unique(x$time), WT = som_vars$unit.classif)
   
   df_classified <- x %>%
     inner_join(clas, by = "time") %>%
-    inner_join(grid_som_vars, by = c("var","lon","lat","WT"))
+    inner_join(grid_som_vars, by = c("var","x","y","WT"))
   
   df_classified_panels <- df_classified %>%
-    group_by(.data$lon, .data$lat, .data$WT, .data$var) %>%
+    group_by(.data$x, .data$y, .data$WT, .data$var) %>%
     mutate(mean_WT_value = mean(.data$value),
-           mean_WT_anom_value = mean(.data$anom_value),
-           pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
+           # pval_ttest = t.test(.data$anom_value, mu = 0)$p.value,
            cv_WT_value = (sd(.data$value) / mean(.data$value)) * 100) %>%
-    select(-.data$value, -.data$anom_value) %>%
+    select(-.data$value) %>%
     ungroup() %>%
-    distinct(.data$lon, .data$lat, .data$WT, .data$var, .keep_all = T)
+    distinct(.data$x, .data$y, .data$WT, .data$var, .keep_all = T)
   
   return(list(clas = clas, 
               grid_clas = df_classified_panels,

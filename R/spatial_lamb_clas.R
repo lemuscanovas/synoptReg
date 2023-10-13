@@ -2,7 +2,7 @@
 #'
 #' @description Calculates the  automatic Lamb or Jenkinson and Collison classification at each grid point. 
 #' The approach details are described in  \code{\link{lamb_clas}}.
-#' @param mslp  Mean Sea Level pressure gridded data.
+#' @param msl  Mean Sea Level pressure gridded data.
 #' @param xmin  minimum longitude
 #' @param xmax  maximum longitude
 #' @param ymin  minimum latitude
@@ -36,9 +36,9 @@
 #' @seealso  \code{\link{lamb_clas}}
 #' 
 #' @examples
-#' data(mslp)
+#' data(msl)
 #' 
-#' clas <- spatial_lamb(mslp, xmin = 5,xmax = 15, ymin = 40, ymax = 50, cores = 1)
+#' clas <- spatial_lamb(msl, xmin = 5,xmax = 15, ymin = 40, ymax = 50, cores = 1)
 #'
 #' @importFrom tidyr pivot_wider pivot_longer separate
 #' @importFrom future.apply future_apply
@@ -46,7 +46,7 @@
 #'
 #' @export
 
-spatial_lamb <- function(mslp, xmin = -180, xmax = 180 , ymin = -80, ymax = 80, 
+spatial_lamb <- function(msl, xmin = -180, xmax = 180 , ymin = -80, ymax = 80, 
                          U = T, thr = c(6,6), cores = 1 ){
   
   lons = seq(xmin,xmax,2.5)
@@ -68,15 +68,15 @@ spatial_lamb <- function(mslp, xmin = -180, xmax = 180 , ymin = -80, ymax = 80,
   lon_max_required <- max(sapply(points, function(x) max(x[[2]])))
   lon_min_required <- min(sapply(points, function(x) min(x[[2]])))
   
-  if (max(mslp$lon) < lon_max_required | min(mslp$lon) > lon_min_required |
-      max(mslp$lat) < lat_max_required | min(mslp$lat) > lat_min_required)
+  if (max(msl$x) < lon_max_required | min(msl$x) > lon_min_required |
+      max(msl$y) < lat_max_required | min(msl$y) > lat_min_required)
     
-    stop(paste0('the mslp dataset has a smaller extent than required.\n
-         Your mslp extension (xmin, xmax, ymin, ymax):',
-                min(mslp$lon),",",
-                max(mslp$lon),",",
-                min(mslp$lat),",",
-                max(mslp$lat)),"\n
+    stop(paste0('the msl dataset has a smaller extent than required.\n
+         Your msl extension (xmin, xmax, ymin, ymax):',
+                min(msl$x),",",
+                max(msl$x),",",
+                min(msl$y),",",
+                max(msl$y)),"\n
          The required extension (xmin, xmax, ymin, ymax):",
          lon_min_required,",",
          lon_max_required,",",
@@ -87,9 +87,9 @@ spatial_lamb <- function(mslp, xmin = -180, xmax = 180 , ymin = -80, ymax = 80,
     plan(multisession,workers = cores) ## Run in parallel on local computer
     
     
-    vars <- future.apply::future_lapply(points, FUN = lamb_clas_helper, mslp = mslp, thr = thr, U = U)
-    clas <- bind_cols(lon = rep(grid$Var1, each = length(unique(mslp$time))),
-                      lat = rep(grid$Var2, each = length(unique(mslp$time))),
+    vars <- future.apply::future_lapply(points, FUN = lamb_clas_helper, msl = msl, thr = thr, U = U)
+    clas <- bind_cols(x = rep(grid$Var1, each = length(unique(msl$time))),
+                      y = rep(grid$Var2, each = length(unique(msl$time))),
                       cl = bind_rows(vars))
     
     clas$WT <- as.factor(clas$WT)
@@ -128,20 +128,20 @@ get_lamb_points_helper <- function(x,y) {
                        "P2","P5","P9","P13","P16",
                        "P1","P4","P8","P12","P15",
                        "P3","P7","P11")) %>% 
-    setNames(c("lat","lon","label"))
+    setNames(c("y","x","label"))
   
   return(jc_scheme)
   
 }
 
-lamb_clas_helper <- function(points,mslp = mslp, U, thr){
+lamb_clas_helper <- function(points,msl = msl, U, thr){
   
-  var <- vars_lamb_helper(points,mslp,U)
+  var <- vars_lamb_helper(points,msl,U)
   
   WT <- apply(var,1,lamb_wt_helper,U,thr)
   
   # clas
-  time <- unique(mslp$time)
+  time <- unique(msl$time)
   clas <- tibble(time,WT)
   
   
@@ -150,9 +150,9 @@ lamb_clas_helper <- function(points,mslp = mslp, U, thr){
 }
 
 
-vars_lamb_helper <- function(points, mslp,U) {
+vars_lamb_helper <- function(points, msl,U) {
   
-  pp <- inner_join(points, mslp, by = c("lon","lat")) %>%
+  pp <- inner_join(points, msl, by = c("x","y")) %>%
     select(c(.data$label,.data$time,.data$value)) %>% 
     pivot_wider(names_from = .data$label,values_from = .data$value) 
   x<- pp

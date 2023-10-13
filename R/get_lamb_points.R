@@ -11,6 +11,8 @@
 #' points <- get_lamb_points(x = -5, y = 40)
 #' points
 #'
+#' @importFrom dplyr relocate rename filter
+#'
 #' @export
 
 
@@ -31,15 +33,18 @@ get_lamb_points <- function(x,y) {
                      x == max(x) & y == min(y)|
                      x == max(x) & y == max(y)) 
   
-  jc_scheme <- cbind.data.frame(pre_scheme,
-                     TF = interaction(pre_scheme) %in% interaction(corners)) %>%
-                       filter(.data$TF == F) %>% 
+  jc_scheme <- pre_scheme %>%
+    cbind.data.frame(interaction(pre_scheme) %in% interaction(corners)) %>%
+    rename("TF" = 3) %>%
+    as_tibble() %>%
+    filter(.data$TF == F) %>% 
     select(-.data$TF) %>% 
     cbind.data.frame(c("P6","P10","P14",
               "P2","P5","P9","P13","P16",
               "P1","P4","P8","P12","P15",
               "P3","P7","P11")) %>% 
-    setNames(c("lat","lon","label"))
+    setNames(c("y","x","label")) %>%
+    relocate(x,.before = y)
   
   return(jc_scheme)
 

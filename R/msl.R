@@ -6,9 +6,9 @@
 #'
 #' @docType data
 #'
-#' @usage data(mslp)
+#' @usage data(msl)
 #'
-#' @format A data.frame with the following variables: \code{lon,lat,time,value}.
+#' @format A data.frame with the following variables: \code{x,y,time,value,var,units}.
 #' \describe{
 #'   \item{geographical area:}{-10,30,30,60}
 #'   \item{time period:}{2000-01-01 to 2002-12-31}
@@ -21,5 +21,5 @@
 #'                    Bull. Amer. Meteor. Soc., 77, 437-470, 1996}
 #'
 #' @examples
-#' data(mslp)
-"mslp"
+#' data(msl)
+"msl"

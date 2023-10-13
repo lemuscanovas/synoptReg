@@ -2,7 +2,7 @@
 #'
 #' \code{pca_decision} plots the explained variances against the number of the principal component. In addition, it returns all the information about the PCA performance.
 #'
-#' @param x data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.
+#' @param x data.frame. A data.frame with the following variables: \code{x, y, time, value, var, units}. See \code{as_synoptReg}.
 #' @param ncomp integer. Number of principal components to show/retain
 #' @param norm logical. Default \code{TRUE}. \code{norm = TRUE} is recommended for classify two ore more variables.
 #' @param matrix_mode character. The mode of matrix to use. Choose between S-mode and T-mode
@@ -17,23 +17,21 @@
 #'
 #' @examples
 #' # Load data (mslp or precp_grid)
-#' data(mslp)
+#' data(msl)
 #' data(z500)
-#' # Tidying our atmospheric variables (500 hPa geopotential height
-#' # and mean sea level pressure) together.
 #'
-#' # Time subset between two dates
-#' atm_data1 <- tidy_nc(x = list(mslp,z500))
+#' # Joining both variables
+#' atmos_data <- dplyr::bind_rows(msl,z500)
 #'
 #' # Deciding on the number of PC to retain
-#' info <- pca_decision(atm_data1)
+#' info <- pca_decision(atmos_data, norm = TRUE)
 #'
 #'
 #' @seealso
-#' \code{\link{tidy_nc}}
+#' \code{\link{as_synoptReg}}
 #'
-#' @importFrom tidyr unite spread gather
-#' @importFrom stats kmeans na.omit princomp varimax
+#' @importFrom tidyr unite pivot_longer pivot_wider gather spread
+#' @importFrom stats kmeans princomp varimax
 #' @importFrom stringr str_pad
 #' @importFrom tibble as_tibble rownames_to_column
 #'
@@ -43,41 +41,41 @@ pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
     if (matrix_mode == "S-mode") {
         if (norm == T) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                group_by(.data$var, .data$lon, .data$lat) %>%
+                select(-units) %>%
+                group_by(.data$var, .data$x, .data$y) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
                 unite("expanded_grid",
-                .data$lon:.data$lat, sep = ",", remove = T) %>%
-                unite("expanded_grid", .data$expanded_grid, .data$var, sep = "_",
+                .data$x:.data$y, sep = ",", remove = T) %>%
+                unite("expanded_grid", .data$expanded_grid, var, sep = "_",
                       remove = T) %>%
-                spread(.data$expanded_grid, .data$value) %>%
+                pivot_wider(names_from = .data$expanded_grid, values_from = .data$value) %>%
                 select(-1) %>%
                 princomp(scores = T)
         } else if (norm == F) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                unite("expanded_grid", .data$lon:.data$lat, sep = ",", remove = T) %>%
-                unite("expanded_grid", .data$expanded_grid, .data$var, sep = "_",
+                select(-units) %>%
+                unite("expanded_grid", .data$x:.data$y, sep = ",", remove = T) %>%
+                unite("expanded_grid", .data$expanded_grid, var, sep = "_",
                       remove = T) %>%
-                spread(.data$expanded_grid, .data$value) %>%
-                select(-1) %>%
+              pivot_wider(names_from = .data$expanded_grid, values_from = .data$value) %>%
+              select(-1) %>%
                 princomp(scores = T)
         }
     } else if (matrix_mode == "T-mode") {
         if (norm == T) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                group_by(.data$var, .data$lon, .data$lat) %>%
+                select(-units) %>%
+                group_by(.data$var, .data$x, .data$y) %>%
                 mutate(value = scale(.data$value)) %>%
                 ungroup() %>%
-                spread(.data$time, .data$value) %>%
+                pivot_wider(names_from = time, values_from =  .data$value) %>%
                 select(-1:-3) %>%
                 princomp(cor = T, scores = T)
         } else if (norm == F) {
             pca <- x %>%
-                select(-.data$anom_value) %>%
-                spread(.data$time, .data$value) %>%
+                select(-units) %>%
+                pivot_wider(names_from = time, values_from = .data$value) %>%
                 select(-1:-3) %>%
                 princomp(cor = T, scores = T)
         }
@@ -98,7 +96,7 @@ pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
 
     summary_data_plot <- summaryPCA %>%
         tibble::rownames_to_column(var = "metrics") %>%
-        gather(key = "PC", value = "value", 1:ncomp + 1)
+        pivot_longer(names_to = "PC", values_to = "value", 1:ncomp + 1)
 
     summary_data_plot$PC <- str_pad(summary_data_plot$PC, 2, "left", "0")
 

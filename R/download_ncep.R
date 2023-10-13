@@ -91,7 +91,7 @@ download_ncep <- function(var = "slp", level = "surface",
     df <- data.frame(lonlat,
                      t(data.frame(matrix(data_mat, nrow = dim(data_mat)[3],
                                          byrow = TRUE)))) %>%
-        setNames(c("lon", "lat", as.character(time))) %>%
+        setNames(c("x", "y", as.character(time))) %>%
         tibble::as_tibble() %>%
         tidyr::gather(key = time, value = "value", -1:-2) %>%
         dplyr::mutate(time = as_date(time))

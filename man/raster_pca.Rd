@@ -4,21 +4,21 @@
 \alias{raster_pca}
 \title{Raster PCA}
 \usage{
-raster_pca(raststack, aggregate = 0, focal = 0)
+raster_pca(x, aggr = NULL, focal = NULL)
 }
 \arguments{
-\item{raststack}{Raster Stack.}
+\item{x}{SpatRaster.}
 
-\item{aggregate}{Integer. Aggregation factor based on function \code{aggregate} of \pkg{raster} package.}
+\item{aggr}{Integer. Aggregation factor based on function \code{aggregate} of \pkg{terra} package.}
 
-\item{focal}{Integer. smooth filter based on function \code{focal} of \pkg{raster} package.}
+\item{focal}{Integer. smooth filter based on function \code{focal} of \pkg{terra} package.}
 }
 \value{
 a list with: \itemize{
-   \item{A raster stack containing the results of the PCA }
-   \item{A data frame containing the main results of the PCA (standard deviation, proportion of variance and cumulative variance}
+   \item{A SpatRaster containing the results of the PCA }
+   \item{A data.frame containing the main results of the PCA (standard deviation, proportion of variance and cumulative variance}
 }
 }
 \description{
-Perform a Principal Component Analysis on a RasterStack
+Perform a Principal Component Analysis on a SpatRaster
 }

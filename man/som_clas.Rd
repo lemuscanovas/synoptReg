@@ -17,7 +17,7 @@ som_clas(
 )
 }
 \arguments{
-\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}
+\item{x}{data.frame. A data.frame with the following variables: \code{x, y, time, value, var,units}. See \code{tidy_nc}.}
 
 \item{xdim}{Integer. X dimension of the grid. See \code{somgrid} from \code{kohonen} package.}
 
@@ -48,12 +48,9 @@ A list with: \itemize{
 \examples{
 # Load data
 data(z500)
-# Tidying our atmospheric variables (500 hPa geopotential height).
-z500_tidy <- tidy_nc(x = list(z500),
-             name_vars = c("z500"))
 
 # SOM classification
-som_cl <- som_clas(z500_tidy, xdim = 4, ydim = 4, iter = 200)
+som_cl <- som_clas(z500, xdim = 4, ydim = 4, iter = 200)
 
 
 }
@@ -65,5 +62,5 @@ Journal of Statistical Software, 21(5), 1 - 19.
 }
 }
 \seealso{
-\code{\link{tidy_nc}}
+\code{\link{as_synoptReg}}
 }

@@ -4,12 +4,12 @@
 \alias{lamb_clas}
 \title{Objective Lamb Weather Type Classification}
 \usage{
-lamb_clas(points, mslp, U = FALSE, thr = c(6, 6))
+lamb_clas(points, msl, U = FALSE, thr = c(6, 6))
 }
 \arguments{
 \item{points}{16 point pair of coordinates obtained from \code{get_lamb_points}.}
 
-\item{mslp}{Mean Sea Level pressure gridded data.}
+\item{msl}{Mean Sea Level pressure gridded data.}
 
 \item{U}{Logical. If T, Jones et al. 2013 approach is applied, maintaining the U-type in the classification. If F, U is removed as detailed in Trigo and DaCamara, 2000.}
 
@@ -29,10 +29,10 @@ Calculates the classification of the main weather types
              to the rules proposed by Trigo and DaCamara, 2000 (2).
 }
 \examples{
-data(mslp)
-
+data(msl)
+msl$value <- msl$value/100
 points <- get_lamb_points(x = 5,y = 40)
-lamb_clas(points = points, mslp = mslp)
+lamb_clas(points = points, msl = msl)
 
 }
 \references{

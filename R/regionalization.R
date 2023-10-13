@@ -1,19 +1,20 @@
 #' Environmental regionalization
 #'
-#' Perform an unspervised clustering of the Raster Stack
+#' Perform an unspervised clustering of a SpatRaster
 #'
-#' @param x SpatRasters
+#' @param x SpatRaster
 #' @param centers Integer. Number of clusters.
 #' @param iter.max Integer. The maximum number of iterations allowed. Default 100.
 #' @param nstart Integer. How many random sets should be chosen? Default 100.
 #' @param algorithm Default Lloyd.
 #'
 #'@return a list with: \itemize{
-#'    \item{A list with the results of the K-means performance
-#'    \item{A raster with the final regionalization }
+#'    \item{A list with the results of the K-means performance}
+#'    \item{A SpatRaster with the final regionalization }
 #'    \item{A list with the results of the K-means performance}
 #
 #' }
+#'
 #'
 #' @export
 

@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+test_scripts.R
+.tests
+pcp_spread.R
+raster_pca_old.R

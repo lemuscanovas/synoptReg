@@ -7,7 +7,7 @@
 pca_decision(x, ncomp = 30, norm = T, matrix_mode = "S-mode")
 }
 \arguments{
-\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}
+\item{x}{data.frame. A data.frame with the following variables: \code{x, y, time, value, var, units}. See \code{as_synoptReg}.}
 
 \item{ncomp}{integer. Number of principal components to show/retain}
 
@@ -30,19 +30,17 @@ To perform the PCA the \code{x} must contain more rows than columns. In addition
 }
 \examples{
 # Load data (mslp or precp_grid)
-data(mslp)
+data(msl)
 data(z500)
-# Tidying our atmospheric variables (500 hPa geopotential height
-# and mean sea level pressure) together.
 
-# Time subset between two dates
-atm_data1 <- tidy_nc(x = list(mslp,z500))
+# Joining both variables
+atmos_data <- dplyr::bind_rows(msl,z500)
 
 # Deciding on the number of PC to retain
-info <- pca_decision(atm_data1)
+info <- pca_decision(atmos_data, norm = TRUE)
 
 
 }
 \seealso{
-\code{\link{tidy_nc}}
+\code{\link{as_synoptReg}}
 }

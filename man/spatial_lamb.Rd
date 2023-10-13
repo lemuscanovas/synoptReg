@@ -5,7 +5,7 @@
 \title{Spatial objective Lamb Weather Type Classification}
 \usage{
 spatial_lamb(
-  mslp,
+  msl,
   xmin = -180,
   xmax = 180,
   ymin = -80,
@@ -16,7 +16,7 @@ spatial_lamb(
 )
 }
 \arguments{
-\item{mslp}{Mean Sea Level pressure gridded data.}
+\item{msl}{Mean Sea Level pressure gridded data.}
 
 \item{xmin}{minimum longitude}
 
@@ -42,9 +42,9 @@ Calculates the  automatic Lamb or Jenkinson and Collison classification at each 
 The approach details are described in  \code{\link{lamb_clas}}.
 }
 \examples{
-data(mslp)
+data(msl)
 
-clas <- spatial_lamb(mslp, xmin = 5,xmax = 15, ymin = 40, ymax = 50, cores = 1)
+clas <- spatial_lamb(msl, xmin = 5,xmax = 15, ymin = 40, ymax = 50, cores = 1)
 
 }
 \references{

@@ -4,10 +4,10 @@
 \alias{synoptclas}
 \title{PCA Synoptic classification}
 \usage{
-synoptclas(x, ncomp, norm = T, matrix_mode = "S-mode", extreme_scores = 2)
+synoptclas(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_scores = 2)
 }
 \arguments{
-\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, anom_value}. See \code{tidy_nc}.}
+\item{x}{data.frame. A data.frame with the following variables: \code{lon, lat, time, value, var, units}. See \code{tidy_nc}.}
 
 \item{ncomp}{Integer. Number of components to be retained.}
 
@@ -29,7 +29,7 @@ A list with: \itemize{
 \details{
 The \code{matrix_mode} argument allows to conduct different types of synoptic classifications depending on the user's objective.
 If the user wants to perform a synoptic classification of a long and continuous series, he must set the \code{matrix_mode = "S-mode"}.
-When we apply the PCA to a matrix in S-mode, the variables are the grid points (lon,lat) and the observations are the days (time series),
+When we apply the PCA to a matrix in S-mode, the variables are the grid points (x,y) and the observations are the days (time series),
 so the linear relationships that the PCA establishes are between the time series of the grid points. One of the results we obtain from the PCA are the "scores",
 which indicate the degree of representativeness of each day for each of the principal components. However, the scores do not allow us to directly obtain the
 weather types (WT) classification, since one day can be represented by several principal components. For this reason, a clustering method is required  to group each day
@@ -44,26 +44,23 @@ In this case, the variables are the days (time series) and the observations are 
 For this reason, the eigenvalues (correlations) allow to allow us to associate each day to a WT without using a clustering method as in the case of the S-mode matrix.
 }
 \examples{
-# Load data (mslp or precp_grid)
-data(mslp)
+# Load data
+data(msl)
 data(z500)
-# Tidying our atmospheric variables (500 hPa geopotential height
-# and mean sea level pressure) together.
-atm_data1 <- tidy_nc(x = list(mslp,z500),
-             name_vars = c("mslp","z500"))
+
+# Joining both variables
+atmos_data <- dplyr::bind_rows(msl,z500)
 
 # S-mode classification
-smode_cl <- synoptclas(atm_data1, ncomp = 6)
+smode_cl <- synoptclas(atmos_data, ncomp = 6, norm = TRUE)
 
 # Time subset using a vector of dates of interest
 dates_int <- c("2000-01-25","2000-04-01","2000-07-14","2001-05-08","2002-12-20")
-atm_data2 <- tidy_nc(x = list(mslp,z500),
-                     time_subset = dates_int,
-                     name_vars = c("mslp","z500"))
+dates_int <- lubridate::as_date(dates_int)
+atmos_data2 <- dplyr::filter(atmos_data, time \%in\% dates_int)
 
 # T-mode classification
-tmode_cl <- synoptclas(atm_data2, ncomp = 2, matrix_mode = "T-mode")
-
+tmode_cl <- synoptclas(atmos_data2, ncomp = 2, matrix_mode = "T-mode")
 
 }
 \references{

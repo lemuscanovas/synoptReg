@@ -21,7 +21,7 @@
 plot_lamb_scheme <- function(points) {
   
   world <- ne_countries(scale = "medium",returnclass = "sf")
-  lamb_points <- points %>% rename("x"="lon","y"="lat")
+  lamb_points <- points
   jc_scheme_sf <- st_as_sf(lamb_points,coords = c("x", "y")) %>% st_set_crs(st_crs(world))
   
   pl<- ggplot()+

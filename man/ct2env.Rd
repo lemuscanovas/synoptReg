@@ -13,7 +13,7 @@ ct2env(x, clas, fun = mean, out = "data.frame")
 
 \item{fun}{function. A function to be applied to the environmental variable for each WT.}
 
-\item{out}{character. Choose between \code{"data.frame"} (default) or \code{"raster"} A function to be applied to the environmental variable for each WT.}
+\item{out}{character. Choose between \code{"data.frame"} (default) or \code{"SpatRaster"} A function to be applied to the environmental variable for each WT.}
 }
 \value{
 a data.frame or a Raster Stack containing the environmental grids based on the weather types.
@@ -22,21 +22,21 @@ a data.frame or a Raster Stack containing the environmental grids based on the w
 This function applies the approach: "circulation types to environment".
 }
 \examples{
-# Load data (mslp or precp_grid)
-data(mslp)
+\dontrun{
+# Load atmospheric data
+data(msl)
 data(z500)
-# Tidying our atmospheric variables (500 hPa geopotential height
-# and mean sea level pressure) together.
 
-# Time subset between two dates
-atm_data1 <- tidy_nc(x = list(mslp,z500),
-             name_vars = c("mslp","z500"))
+# Joining both variables
+atmos_data <- dplyr::bind_rows(msl,z500)
 
 # S-mode classification
-smode_clas <- synoptclas(atm_data1, ncomp = 6)
+smode_cl <- synoptclas(atmos_data, ncomp = 6, norm = T)
 
+# Load precipitation data 
+pcp_file <- system.file("inst/extdata", "pcp_spread.nc", package = "synoptReg")
 # ct2env (precipitation example)
-ct2env(x = pcp, clas = smode_clas$clas, fun = mean, out = "data.frame")
-
+ct2env(x = pcp, clas = smode_cl$clas, fun = mean, out = "data.frame")
+}
 
 }

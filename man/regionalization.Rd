@@ -4,25 +4,26 @@
 \alias{regionalization}
 \title{Environmental regionalization}
 \usage{
-regionalization(raststack, centers, iter.max = 100, nstart = 100)
+regionalization(x, centers, iter.max = 100, nstart = 100, algorithm = "Lloyd")
 }
 \arguments{
-\item{raststack}{Raster Stack.}
+\item{x}{SpatRaster}
 
 \item{centers}{Integer. Number of clusters.}
 
 \item{iter.max}{Integer. The maximum number of iterations allowed. Default 100.}
 
 \item{nstart}{Integer. How many random sets should be chosen? Default 100.}
+
+\item{algorithm}{Default Lloyd.}
 }
 \value{
 a list with: \itemize{
-   \item{A raster with the final regionalization }
    \item{A list with the results of the K-means performance}
-   \item{A raster displaying a pseudo-MAE error based on the difference between each pixel value and its respective centroide}
-   \item{A numeric pseudo-MAE mean value for the entire map}
+   \item{A SpatRaster with the final regionalization }
+   \item{A list with the results of the K-means performance}
 }
 }
 \description{
-Perform an unspervised clustering of the Raster Stack
+Perform an unspervised clustering of a SpatRaster
 }
