@@ -4,10 +4,10 @@ synoptReg <img src="img/logo.png" align="right" alt="" width="140" />
 
 
 [![CRAN status](https://www.r-pkg.org/badges/version/synoptReg)](https://cran.r-project.org/package=synoptReg)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/synoptReg)](http://cran.rstudio.com/web/packages/synoptReg/index.html)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/synoptReg)](https://cran.r-project.org/package=synoptReg)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
-developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 ## Overview
 

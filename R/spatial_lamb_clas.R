@@ -36,8 +36,10 @@
 #' @seealso  \code{\link{lamb_clas}}
 #' 
 #' @examples
+#' library(dplyr)
 #' data(msl)
 #' 
+#' msl <- filter(msl, time >= "2000-01-01", time <= "2000-03-30")
 #' clas <- spatial_lamb(msl, xmin = 5,xmax = 15, ymin = 40, ymax = 50, cores = 1)
 #'
 #' @importFrom tidyr pivot_wider pivot_longer separate

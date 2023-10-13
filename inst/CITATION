@@ -1,7 +1,7 @@
 citHeader("To cite package synoptReg in publications use:")
 
-citEntry(
-  entry    = "Article",
+bibentry(
+  bibtype    = "Article",
   title = "synoptReg: An R package for computing a synoptic climate classification and a spatial regionalization of environmental data",
   journal  = "Environmental Modelling & Software",
   volume   = "118",
