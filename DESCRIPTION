@@ -34,7 +34,6 @@ Imports:
     methods
 Suggests:
     ncdf4,
-    sf,
     gridExtra,
 NeedsCompilation: no
 RoxygenNote: 7.2.3

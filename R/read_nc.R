@@ -47,7 +47,7 @@ read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL,
   
   dates_daily <- as_date(dates)
   dat <- tapp(dat,as.factor(dates_daily),"mean")
-  terra::time(dat) <- dates_daily
+  terra::time(dat) <- unique(dates_daily)
   
   
   if(isTRUE(anomaly)){
