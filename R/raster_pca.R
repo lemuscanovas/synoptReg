@@ -30,7 +30,7 @@ raster_pca <- function(x, aggr = NULL, focal = NULL){
     Proportion = eigs/sum(eigs),
     Cumulative = cumsum(eigs)/sum(eigs))
   
-  pca_predict <- predict(x, pca)
+  pca_predict <- terra::predict(x, pca)
  
   names(pca_predict) <- paste0("PC", 1:nlyr(pca_predict))
   
