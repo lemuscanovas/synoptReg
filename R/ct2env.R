@@ -33,8 +33,20 @@
 ct2env <- function(x, clas, fun = mean, out = "data.frame") {
 
     FUN <- match.fun(fun)
-
-    env <- tapp(x, clas, FUN)
+    dates_env <- time(x)
+    dates_clas <- clas$time
+    
+    if(length(dates_env) != dates_clas){
+    ## Time series matching if they have different lengths
+    match_dates_env <- which(dates_env %in% dates_clas)
+    x <- x[[match_dates]]
+    
+    match_dates_WT <- which(dates_clas %in% time(x))
+    clas <- slice(clas, match_dates_WT)
+    }
+    WTs <- select(clas,2) %>% pull %>% as_factor()
+    
+    env <- tapp(x, WTs, FUN)
     name <- names(env) %>% 
       str_remove("X") %>% 
       str_pad(width = 2, "left",pad = 0)

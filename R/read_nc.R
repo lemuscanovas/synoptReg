@@ -41,12 +41,15 @@ read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL,
   varname <- varnames(dat) %>% unique
   unit <- units(dat) %>% unique
   dates <- terra::time(dat)
-  if((!is.Date(dates) | !is.POSIXct(dates)) == F){
-    stop("Your file does not contain a readable time string!")
+  if(sum(inherits(dates, "Date") + inherits(dates, "POSIXct") == 0)){
+    stop("Not readable time string or not provided!")
   }
   
   dates_daily <- as_date(dates)
+  
+  if(any(dates_daily == lag(dates_daily),na.rm = T) == T){
   dat <- tapp(dat,as.factor(dates_daily),"mean")
+  }
   terra::time(dat) <- unique(dates_daily)
   
   
