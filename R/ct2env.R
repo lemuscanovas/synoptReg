@@ -33,10 +33,10 @@
 ct2env <- function(x, clas, fun = mean, out = "data.frame") {
 
     FUN <- match.fun(fun)
-    dates_env <- time(x)
+    dates_env <- terra::time(x)
     dates_clas <- clas$time
     
-    if(length(dates_env) != dates_clas){
+    if(length(dates_env) != length(dates_clas)){
     ## Time series matching if they have different lengths
     match_dates_env <- which(dates_env %in% dates_clas)
     x <- x[[match_dates_env]]
