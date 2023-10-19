@@ -39,12 +39,12 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     if(length(dates_env) != dates_clas){
     ## Time series matching if they have different lengths
     match_dates_env <- which(dates_env %in% dates_clas)
-    x <- x[[match_dates]]
+    x <- x[[match_dates_env]]
     
     match_dates_WT <- which(dates_clas %in% time(x))
     clas <- slice(clas, match_dates_WT)
     }
-    WTs <- select(clas,2) %>% pull %>% as_factor()
+    WTs <- select(clas,2) %>% pull %>% as.factor()
     
     env <- tapp(x, WTs, FUN)
     name <- names(env) %>% 
