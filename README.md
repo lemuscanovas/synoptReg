@@ -4,10 +4,10 @@ synoptReg <img src="img/logo.png" align="right" alt="" width="140" />
 
 
 [![CRAN status](https://www.r-pkg.org/badges/version/synoptReg)](https://cran.r-project.org/package=synoptReg)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/synoptReg)](https://cran.r-project.org/package=synoptReg)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/synoptReg)](http://cran.rstudio.com/web/packages/synoptReg/index.html)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
-developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 
 ## Overview
 
@@ -57,7 +57,7 @@ In short, `synoptReg` allows to:
 # To install the CRAN version (1.2.1):
 install.packages("synoptReg")
 
-# To install the latest version from Github:
+# To install the latest version from Github (1.3.0):
 # install.packages("remotes")
 remotes::install_github("lemuscanovas/synoptReg")
 ```
@@ -71,10 +71,10 @@ Interested in learning how to use `synoptReg`? Visit the package website and rea
 
 ## Package citation
 
-Using synoptReg for research publication?  Please **cite it**! I'm an early career scientist and every citation matters.
+Using synoptReg for research publication?  Please **cite it**!
 
 ***Lemus-Canovas, M., Lopez-Bustins, J.A., Martin-Vide, J., Royé, D.***, 2019. *synoptReg: An R package for computing a synoptic climate classification and a spatial regionalization of environmental data*. Environmental Modelling & Software, Vol. 118,114-119pp, ISSN 1364-8152, https://doi.org/10.1016/j.envsoft.2019.04.006
 
 ## Contact
 
-Feel free to contact me: mlemus@ari.ad
+Feel free to contact me: lemuscanovas@gmail.com
