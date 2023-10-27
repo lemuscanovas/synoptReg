@@ -46,6 +46,8 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     }
     WTs <- select(clas,2) %>% pull %>% as.factor()
     
+    seq_wts <- WTs %>% unique() %>% sort %>% as.character()
+   
     env <- tapp(x, WTs, FUN)
     name <- names(env) %>% 
       str_remove("X") %>% 
@@ -55,6 +57,7 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     env <- env[[order(names(env))]]
     varnames(env) <- varnames(x)
     units(env) <- unique(units(x))
+    names(env)<- seq_wts
     
     if (out == "SpatRaster") {
 
