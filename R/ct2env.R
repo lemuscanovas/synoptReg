@@ -31,7 +31,7 @@
 #' @export
 
 ct2env <- function(x, clas, fun = mean, out = "data.frame") {
-
+  
     FUN <- match.fun(fun)
     dates_env <- terra::time(x)
     dates_clas <- clas$time
@@ -49,12 +49,9 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     seq_wts <- WTs %>% unique() %>% sort %>% as.character()
    
     env <- tapp(x, WTs, FUN)
-    name <- names(env) %>% 
-      str_remove("X") %>% 
-      str_pad(width = 2, "left",pad = 0)
-    names(env) <- paste0("WT",name)
+    names(env) <- seq_wts
     
-    env <- env[[order(names(env))]]
+    # env <- env[[order(names(env))]]
     varnames(env) <- varnames(x)
     units(env) <- unique(units(x))
     names(env)<- seq_wts
