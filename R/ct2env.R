@@ -54,8 +54,7 @@ ct2env <- function(x, clas, fun = mean, out = "data.frame") {
     # env <- env[[order(names(env))]]
     varnames(env) <- varnames(x)
     units(env) <- unique(units(x))
-    names(env)<- seq_wts
-    
+
     if (out == "SpatRaster") {
 
         return(env)
