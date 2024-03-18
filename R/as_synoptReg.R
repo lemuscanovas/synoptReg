@@ -30,7 +30,7 @@
 
 as_synoptReg <- function(x){
   
-  varname <- varnames(x)
+  varname <- unique(varnames(x))
   unit <- unique(units(x))
   times <- time(x)
   
