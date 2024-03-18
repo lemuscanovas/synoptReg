@@ -67,7 +67,7 @@ read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL,
   
   if(!is.null(time_subset)){
     
-    dates <- terra::time(var)
+    dates <- terra::time(dat)
     class(dates)
     
     if(is(dates, "Date")){
