@@ -30,7 +30,7 @@
 #' @importFrom terra app crop nlyr
 #' @export
 
-read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL, 
+read_nc <- function(x, level = NULL, anomaly = F, time_subset = NULL, month_subset = NULL, 
                     crop_area = NULL, aggregate = NULL){
   
   if(is(x, "SpatRaster")){
@@ -52,6 +52,13 @@ read_nc <- function(x, anomaly = F, time_subset = NULL, month_subset = NULL,
   }
   terra::time(dat) <- unique(dates_daily)
   
+  if(is.numeric(level) == T){ # selecting pressure level
+    
+    levs <- names(dat)
+    l <- which(str_detect(levs, paste0(level,"_")))
+    
+    dat <- dat[[l]] 
+  }
   
   if(isTRUE(anomaly)){
     
