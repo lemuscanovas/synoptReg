@@ -41,6 +41,15 @@ read_nc <- function(x, level = NULL, anomaly = F, time_subset = NULL, month_subs
   }
   varname <- varnames(dat) %>% unique
   unit <- units(dat) %>% unique
+  
+  if(is.numeric(level) == T){ # selecting pressure level
+    
+    levs <- names(dat)
+    l <- which(str_detect(levs, paste0(level,"_")))
+    
+    dat <- dat[[l]] 
+  }
+  
   dates <- terra::time(dat)
   if(sum(inherits(dates, "Date") + inherits(dates, "POSIXct") == 0)){
     stop("Not readable time string or not provided!")
@@ -53,13 +62,7 @@ read_nc <- function(x, level = NULL, anomaly = F, time_subset = NULL, month_subs
   }
   terra::time(dat) <- unique(dates_daily)
   
-  if(is.numeric(level) == T){ # selecting pressure level
-    
-    levs <- names(dat)
-    l <- which(str_detect(levs, paste0(level,"_")))
-    
-    dat <- dat[[l]] 
-  }
+  
   
   if(isTRUE(anomaly)){
     
