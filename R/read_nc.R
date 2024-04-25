@@ -28,6 +28,7 @@
 #' @importFrom methods is
 #' @importFrom stats prcomp var
 #' @importFrom terra app crop nlyr
+#' @importFrom stringr str_detect
 #' @export
 
 read_nc <- function(x, level = NULL, anomaly = F, time_subset = NULL, month_subset = NULL, 
