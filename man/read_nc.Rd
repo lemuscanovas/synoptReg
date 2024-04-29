@@ -6,6 +6,7 @@
 \usage{
 read_nc(
   x,
+  level = NULL,
   anomaly = F,
   time_subset = NULL,
   month_subset = NULL,
@@ -15,6 +16,8 @@ read_nc(
 }
 \arguments{
 \item{x}{path to file or SpatRaster object.}
+
+\item{level}{integer. Default NULL. Select a specific pressure level if the data contains multiple levels.}
 
 \item{anomaly}{logical. If TRUE it convets into anomalies, based on their corresponding monthly means.}
 

@@ -3,6 +3,7 @@
 #' Read and tidy your initial NetCDF by turning the absolute values into monthly-based anomalies, and by subsetting the time series and geogprahical area of your atmospheric variable.
 
 #' @param x path to file or SpatRaster object.
+#' @param level integer. Default NULL. Select a specific pressure level if the data contains multiple levels.
 #' @param anomaly logical. If TRUE it convets into anomalies, based on their corresponding monthly means.
 #' @param time_subset character or Date. Default NULL. Provide a vector of dates to subset the original SpatRaster time series.
 #' @param month_subset integer. Default NULL. Provide a vector of integers to subset the original SpatRaster by months.
