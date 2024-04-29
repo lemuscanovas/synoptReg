@@ -92,7 +92,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_sc
         scores <- scale(pca$scores[, 1:ncomp]) %*%
             varimax(rawLoadings)$rotmat %>%
             as.data.frame() %>%
-            as_tibble(.name_repair = "unique") %>%
+            as_tibble(.name_repair = "unique_quiet") %>%
             setNames(paste0("PC", 1:ncomp))
 
         # Extreme scores calculation (Esteban et al., 2005)
@@ -188,13 +188,13 @@ synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_sc
         rawLoadings <- pca$loadings[, 1:ncomp] %*% diag(pca$sdev, ncomp, ncomp)
         rotatedLoadings <- varimax(rawLoadings)$loadings[]
         scores <- scale(pca$scores[, 1:ncomp]) %*% varimax(rawLoadings)$rotmat %>%
-            as_tibble(.name_repair = "unique") %>%
+            as_tibble(.name_repair = "unique_quiet") %>%
             setNames(paste0("PC", 1:ncomp))
 
 
         ## Max Positive Loading WT procedure
         max_rotatedLoadings <- rotatedLoadings %>%
-            as_tibble(.name_repair = "unique") %>%
+            as_tibble(.name_repair = "unique_quiet") %>%
             setNames(paste0("PC", 1:ncomp))
         max_rotatedLoadings$WT_max <- names(max_rotatedLoadings)[max.col(max_rotatedLoadings,
                                                                          ties.method = "first")]
@@ -206,7 +206,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_sc
         ## Negative/postive WT procedure
         
         abs_rotatedLoadings <- abs(rotatedLoadings) %>%
-          as_tibble(.name_repair = "unique") %>%
+          as_tibble(.name_repair = "unique_quiet") %>%
           setNames(paste0("PC", 1:ncomp))
         abs_rotatedLoadings$WT_abs <- names(abs_rotatedLoadings)[max.col(abs_rotatedLoadings,
                                                                          ties.method = "first")]
@@ -215,7 +215,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_sc
         abs_rotatedLoadings$WT_abs <- WT_abs
         
         WT_posneg <- rotatedLoadings %>%
-            as_tibble(.name_repair = "unique") %>%
+            as_tibble(.name_repair = "unique_quiet") %>%
             setNames(1:ncomp) %>%
             cbind.data.frame(time = unique(x$time),
                              WT_abs =abs_rotatedLoadings$WT_abs,
