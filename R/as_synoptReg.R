@@ -36,9 +36,16 @@ as_synoptReg <- function(x){
   
   df <- terra::as.data.frame(x, xy = TRUE) %>%
     setNames(c("x","y",paste0("X",times))) %>%
-    pivot_longer(names_to = "time",values_to = "value", 3:ncol(.)) %>%
-    mutate(time = as_date(str_remove(time, "X")),
+    pivot_longer(names_to = "time",values_to = "value", 3:ncol(.))
+  
+  if(str_length(as_date(times[1])) == 10){
+    df <- mutate(time = as_date(str_remove(time, "X")),
            var = varname,
            units = unit)
+  } else {
+    df <- mutate(time = as_datetime(str_remove(time, "X")),
+                 var = varname,
+                 units = unit)
+  } 
   return(df)
 }
