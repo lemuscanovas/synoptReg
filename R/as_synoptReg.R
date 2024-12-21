@@ -38,7 +38,7 @@ as_synoptReg <- function(x){
     setNames(c("x","y",paste0("X",times))) %>%
     pivot_longer(names_to = "time",values_to = "value", 3:ncol(.))
   
-  if(str_length(as_date(times[1])) == 10){
+  if(str_length(as_date(times[1])) <= 10){
     df <- mutate(df, time = as_date(str_remove(time, "X")),
            var = varname,
            units = unit)
