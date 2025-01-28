@@ -175,7 +175,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_sc
                 ungroup() %>%
                 spread(.data$time,.data$value) %>%
                 select(-1:-3) %>%
-                princomp(scores = T)
+                princomp(scores = T,cor=T)
 
         } else if (norm == F) {
             pca <- x %>%
