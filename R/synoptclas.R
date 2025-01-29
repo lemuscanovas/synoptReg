@@ -60,7 +60,7 @@
 #'
 #' @export
 
-synoptclas <- function(x, ncomp, norm = TRUE, cor= T, matrix_mode = "S-mode", extreme_scores = 2) {
+synoptclas <- function(x, ncomp, norm = TRUE, matrix_mode = "S-mode", extreme_scores = 2) {
 
     if (matrix_mode == "S-mode") {
 
@@ -76,7 +76,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, cor= T, matrix_mode = "S-mode", ex
                       remove = T) %>%
                 pivot_wider(names_from = .data$expanded_grid,values_from =  .data$value) %>%
                 select(-1) %>%
-                princomp(scores = T,cor=cor)
+                princomp(scores = T,cor=F)
         } else if (norm == F) {
             pca <- x %>%
                 select(-units) %>%
@@ -85,7 +85,7 @@ synoptclas <- function(x, ncomp, norm = TRUE, cor= T, matrix_mode = "S-mode", ex
                       remove = T) %>%
                 pivot_wider(names_from = .data$expanded_grid,values_from =  .data$value) %>%
                 select(-1) %>%
-                princomp(scores = T,cor=cor)
+                princomp(scores = T)
         }
         rawLoadings <- pca$loadings[, 1:ncomp] %*% diag(pca$sdev, ncomp, ncomp)
         rotatedLoadings <- varimax(rawLoadings)$loadings
@@ -175,14 +175,14 @@ synoptclas <- function(x, ncomp, norm = TRUE, cor= T, matrix_mode = "S-mode", ex
                 ungroup() %>%
                 spread(.data$time,.data$value) %>%
                 select(-1:-3) %>%
-                princomp(scores = T,cor=cor)
+                princomp(scores = T,cor=F)
 
         } else if (norm == F) {
             pca <- x %>%
               select(-units) %>%
               spread(.data$time, .data$value) %>%
                 select(-1:-3) %>%
-                princomp(scores = T,cor=cor)
+                princomp(scores = T)
         }
 
         rawLoadings <- pca$loadings[, 1:ncomp] %*% diag(pca$sdev, ncomp, ncomp)

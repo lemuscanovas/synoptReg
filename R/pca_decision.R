@@ -37,7 +37,7 @@
 #'
 #' @export
 
-pca_decision <- function(x, ncomp = 30, norm = T,cor = T, matrix_mode = "S-mode") {
+pca_decision <- function(x, ncomp = 30, norm = T, matrix_mode = "S-mode") {
     if (matrix_mode == "S-mode") {
         if (norm == T) {
             pca <- x %>%
@@ -51,7 +51,7 @@ pca_decision <- function(x, ncomp = 30, norm = T,cor = T, matrix_mode = "S-mode"
                       remove = T) %>%
                 pivot_wider(names_from = .data$expanded_grid, values_from = .data$value) %>%
                 select(-1) %>%
-                princomp(scores = T, cor = cor)
+                princomp(scores = T, cor = F)
         } else if (norm == F) {
             pca <- x %>%
                 select(-units) %>%
@@ -60,7 +60,7 @@ pca_decision <- function(x, ncomp = 30, norm = T,cor = T, matrix_mode = "S-mode"
                       remove = T) %>%
               pivot_wider(names_from = .data$expanded_grid, values_from = .data$value) %>%
               select(-1) %>%
-                princomp(scores = T, cor = cor)
+                princomp(scores = T)
         }
     } else if (matrix_mode == "T-mode") {
         if (norm == T) {
@@ -71,13 +71,13 @@ pca_decision <- function(x, ncomp = 30, norm = T,cor = T, matrix_mode = "S-mode"
                 ungroup() %>%
                 pivot_wider(names_from = time, values_from =  .data$value) %>%
                 select(-1:-3) %>%
-                princomp(cor = cor, scores = T)
+                princomp(cor = F, scores = T)
         } else if (norm == F) {
             pca <- x %>%
                 select(-units) %>%
                 pivot_wider(names_from = time, values_from = .data$value) %>%
                 select(-1:-3) %>%
-                princomp(cor = cor, scores = T)
+                princomp(scores = T)
         }
     }
     # summary table
